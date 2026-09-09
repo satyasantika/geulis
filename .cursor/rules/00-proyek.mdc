@@ -1,0 +1,49 @@
+---
+alwaysApply: true
+---
+
+# GEULIS — aturan proyek
+
+LMS matematika berdiferensiasi berbasis etnomatematika Priangan Timur untuk mengembangkan *computational thinking* siswa SMA pada transformasi geometri. **Produk penelitian** (PPKap Unsil 2026, EDR-Plomp), bukan produk komersial: akan divalidasi ahli, dilaporkan di artikel ilmiah, dan didaftarkan Hak Cipta. Subjeknya anak di bawah umur.
+
+Panduan lengkap ada di `CLAUDE.md`; spesifikasi desain di `docs/spesifikasi/CETAK-BIRU-LMS-CT.md`. Kalau sebuah keputusan tidak terjawab di sana, **tanya — jangan mengarang spesifikasi penelitian**.
+
+## Lingkungan
+
+Semua perintah lewat Docker (container `geulis-php`; compose ada di `~/code/docker-compose.yml`, bukan di repo). **Jangan pernah menjalankan `php`, `composer`, atau `artisan` di host.**
+
+```bash
+docker exec geulis-php php artisan test
+docker exec geulis-php ./vendor/bin/pint
+docker exec geulis-php php artisan migrate
+```
+
+## Sembilan aturan yang tidak bisa ditawar
+
+1. Perubahan pada Mesin Diferensiasi **wajib** disertai kasus uji.
+2. `adaptation_logs` hanya ditambah — tanpa `update`, `delete`, atau `truncate` di kode produksi.
+3. `config/geulis.php` dibekukan setelah validasi ahli dimulai; konfirmasi sebelum menyentuhnya.
+4. Ekspor data selalu memakai kode anonim (`S-001`, …).
+5. Jangan pernah mengumpulkan NIK, alamat rumah, nomor HP pribadi, atau foto wajah siswa.
+6. Aset budaya wajib punya `perajin_sumber`, `lokasi`, `tanggal_dokumentasi`, `izin_diperoleh`.
+7. Mobile-first tanpa kecuali — setiap layar jalan pada lebar 360 px.
+8. Di luar cakupan tahun ini: tutor AI/LLM, kelas sinkron, materi lain, papan peringkat, aplikasi native, Dapodik/SSO. Ide bagus yang masuk daftar ini dicatat ke `docs/IDE-TAHUN-DEPAN.md`, tidak dikerjakan.
+9. Setelah *feature freeze* Bulan 9: hanya perbaikan kesalahan yang menghalangi pemakaian.
+
+## Bahasa
+
+Istilah domain Bahasa Indonesia (`nilai_m`, `level_kini`, `iterasi_remedial`); konvensi Laravel tetap Inggris (`MasteryState`, `adaptation_logs`). Komentar Bahasa Indonesia, menjelaskan **mengapa** bukan **apa**. Teks antarmuka Bahasa Indonesia dan tidak pernah menghakimi siswa.
+
+## Commit
+
+Setiap sesi wajib berakhir dengan commit. Format:
+
+```
+<tipe>(<lingkup>): <ringkasan huruf kecil tanpa titik>
+
+Sprint: <nomor>
+```
+
+Tipe: `feat` `fix` `test` `refactor` `docs` `chore` `wip`.
+Lingkup: `mesin` `motif` `riset` `konten` `auth` `guru` `siswa` `db` `docker` `ui`.
+Satu commit, satu maksud.

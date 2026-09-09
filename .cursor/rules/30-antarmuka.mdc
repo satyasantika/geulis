@@ -1,0 +1,33 @@
+---
+description: Aturan antarmuka Blade/Livewire — mobile-first, nada bahasa, dan ketahanan jaringan sekolah
+globs: resources/**,app/Livewire/**,public/**
+alwaysApply: false
+---
+
+# Antarmuka GEULIS
+
+## Mobile-first, tanpa kecuali
+
+Sebagian besar siswa membuka sistem ini dari HP di jaringan sekolah, bukan dari lab komputer. **Setiap layar wajib dapat digunakan pada lebar 360 px** — termasuk Motif Builder, yang paling mudah gagal di sini. Uji pada lebar itu sebelum menyatakan selesai.
+
+## Nada bahasa
+
+Sistem tidak pernah menyebut siswa "lemah", "bodoh", atau "gagal". Yang disebut adalah posisi sementara pada satu unit materi, dan selalu disertai jalan keluarnya. Bandingkan:
+
+- ✗ "Nilaimu di bawah standar. Kamu diturunkan ke level dasar."
+- ✓ "Kita pelan-pelan dulu, ya. Bagian ini akan ditampilkan dengan versi yang lebih terbimbing sebelum kamu mencoba lagi."
+
+Setiap keputusan sistem dijelaskan kepada siswa dengan bahasa manusia; guru melihat kode aturannya; peneliti melihat seluruh jejaknya. Sistem tidak boleh terasa seperti kotak hitam yang menghakimi.
+
+Kesalahan menjelaskan apa yang terjadi dan cara memperbaikinya — tanpa permintaan maaf, tanpa kalimat kabur.
+
+## Ketahanan jaringan
+
+- Materi pertemuan berikutnya disimpan di *cache* lewat *service worker*.
+- Jawaban diantre secara lokal dan dikirim ulang saat sinyal kembali.
+- GeoGebra dimuat dari server sendiri, **tidak pernah dari CDN** — sekolah kerap memblokir atau melambatkannya.
+- Gambar artefak: WebP responsif, maksimal 200 KB per gambar tampilan.
+
+## Atribusi budaya
+
+Setiap foto artefak menampilkan nama motif, perajin atau sumbernya, lokasi, dan tanggal dokumentasi. Ini soal etika terhadap komunitas yang karyanya dipakai, sekaligus memperkuat keabsahan klaim etnomatematikanya. Layar yang menampilkan aset budaya tanpa atribusi dianggap belum selesai.

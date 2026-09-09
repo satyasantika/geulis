@@ -1,0 +1,23 @@
+* text=auto eol=lf
+
+*.php      text diff=php
+*.blade.php text
+*.md       text
+*.json     text
+*.yml      text
+*.yaml     text
+*.sh       text eol=lf
+*.ps1      text eol=crlf
+
+*.png      binary
+*.jpg      binary
+*.jpeg     binary
+*.webp     binary
+*.pdf      binary
+*.xlsx     binary
+*.docx     binary
+
+# Sembunyikan berkas turunan dari diff supaya tinjauan tetap terbaca.
+/public/build/**  linguist-generated=true -diff
+composer.lock     -diff
+package-lock.json -diff

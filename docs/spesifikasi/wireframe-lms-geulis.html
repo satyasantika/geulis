@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wireframe LMS GEULIS</title>
+<style>
+:root{
+  --ink:#1c1917; --ink2:#57534e; --ink3:#a8a29e;
+  --line:#d6d3d1; --line2:#e7e5e4; --bg:#faf9f7; --card:#fff;
+  --accent:#7c2d12; --accent2:#c2410c; --accent-bg:#fff7ed;
+  --ok:#166534; --ok-bg:#f0fdf4; --warn:#854d0e; --warn-bg:#fefce8;
+  --info:#1e40af; --info-bg:#eff6ff;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:15px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px 96px}
+header.top{border-bottom:1px solid var(--line);background:var(--card);padding:28px 0 24px;margin-bottom:32px}
+header.top .wrap{padding-bottom:0}
+h1{font-size:26px;margin:0 0 6px;letter-spacing:-.02em}
+.sub{color:var(--ink2);font-size:14px;margin:0}
+.badge{display:inline-block;font:600 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);background:var(--accent-bg);border:1px solid #fed7aa;padding:5px 8px;border-radius:4px;margin-bottom:12px}
+nav.toc{display:flex;flex-wrap:wrap;gap:6px;margin:22px 0 0}
+nav.toc a{font-size:12.5px;color:var(--ink2);text-decoration:none;border:1px solid var(--line);
+  background:var(--card);padding:5px 10px;border-radius:999px}
+nav.toc a:hover{border-color:var(--accent2);color:var(--accent)}
+section{margin:0 0 52px;scroll-margin-top:20px}
+h2{font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink2);
+  border-bottom:1px solid var(--line);padding-bottom:8px;margin:0 0 6px}
+.note{font-size:13.5px;color:var(--ink2);margin:0 0 18px;max-width:66ch}
+.row{display:flex;flex-wrap:wrap;gap:22px;align-items:flex-start}
+
+/* frames */
+.phone{width:330px;border:1px solid var(--line);border-radius:22px;background:var(--card);
+  overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.phone .bar{height:26px;background:#f5f5f4;border-bottom:1px solid var(--line2);
+  display:flex;align-items:center;justify-content:center}
+.phone .bar span{width:56px;height:5px;background:var(--line);border-radius:3px}
+.desk{flex:1;min-width:520px;border:1px solid var(--line);border-radius:10px;background:var(--card);
+  overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.desk .bar{height:30px;background:#f5f5f4;border-bottom:1px solid var(--line2);
+  display:flex;align-items:center;gap:6px;padding:0 12px}
+.desk .bar i{width:9px;height:9px;border-radius:50%;background:var(--line);display:block}
+.desk .bar b{font:500 11px var(--mono);color:var(--ink3);margin-left:8px}
+.scr{padding:16px}
+.cap{font:600 11px/1 var(--mono);color:var(--ink3);letter-spacing:.06em;margin:10px 2px 0}
+
+/* ui atoms */
+.appbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;
+  border-bottom:1px solid var(--line2);background:#fff}
+.logo{font-weight:800;font-size:14px;letter-spacing:.04em;color:var(--accent)}
+.avatar{width:26px;height:26px;border-radius:50%;background:var(--line2);border:1px solid var(--line)}
+.h{font-weight:700;font-size:15px;margin:0 0 3px}
+.t{font-size:12.5px;color:var(--ink2);margin:0 0 12px}
+.box{border:1px solid var(--line);border-radius:8px;padding:12px;margin-bottom:10px;background:#fff}
+.box.acc{border-color:#fed7aa;background:var(--accent-bg)}
+.box.ok{border-color:#bbf7d0;background:var(--ok-bg)}
+.box.warn{border-color:#fde68a;background:var(--warn-bg)}
+.box.info{border-color:#bfdbfe;background:var(--info-bg)}
+.lbl{font:600 10px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:5px}
+.btn{display:block;width:100%;text-align:center;background:var(--accent);color:#fff;border:0;border-radius:7px;
+  padding:10px;font-weight:600;font-size:13px;margin-top:8px}
+.btn.sec{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.pill{display:inline-block;font:600 10.5px/1 var(--mono);padding:4px 7px;border-radius:4px;
+  border:1px solid var(--line);color:var(--ink2);background:#fafaf9;margin:0 4px 4px 0}
+.pill.a{color:var(--accent);background:var(--accent-bg);border-color:#fed7aa}
+.pill.g{color:var(--ok);background:var(--ok-bg);border-color:#bbf7d0}
+.pill.w{color:var(--warn);background:var(--warn-bg);border-color:#fde68a}
+.pill.b{color:var(--info);background:var(--info-bg);border-color:#bfdbfe}
+.ph{background:repeating-linear-gradient(45deg,#f5f5f4,#f5f5f4 6px,#eeedeb 6px,#eeedeb 12px);
+  border:1px solid var(--line2);border-radius:6px;display:flex;align-items:center;justify-content:center;
+  color:var(--ink3);font:600 10px var(--mono);letter-spacing:.06em;text-align:center;padding:4px}
+.bar-track{height:7px;background:var(--line2);border-radius:4px;overflow:hidden;margin:6px 0}
+.bar-fill{height:100%;background:var(--accent2)}
+.input{border:1px solid var(--line);border-radius:6px;padding:9px 10px;font-size:12.5px;color:var(--ink3);background:#fff;margin-bottom:8px}
+table.ui{width:100%;border-collapse:collapse;font-size:12px}
+table.ui th{text-align:left;font:600 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--ink3);padding:7px 8px;border-bottom:1px solid var(--line)}
+table.ui td{padding:7px 8px;border-bottom:1px solid var(--line2)}
+.hm{width:20px;height:20px;border-radius:3px;display:inline-block}
+.step{display:flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:6px;
+  padding:7px 9px;margin-bottom:6px;background:#fff;font:600 11.5px var(--mono)}
+.step .n{width:18px;height:18px;border-radius:4px;background:var(--accent);color:#fff;
+  display:flex;align-items:center;justify-content:center;font-size:10px;flex:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.legend{font-size:12px;color:var(--ink2);margin-top:10px}
+.legend code{font:600 11px var(--mono);background:#f5f5f4;padding:2px 5px;border-radius:3px;border:1px solid var(--line2)}
+@media(max-width:760px){.desk{min-width:0}.phone{width:100%}}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <span class="badge">Wireframe · v1.0 · 9 Sep 2026</span>
+  <h1>LMS GEULIS — Rancangan Antarmuka</h1>
+  <p class="sub">Desain Pembelajaran Digital Adaptif Berbasis Etnomatematika Priangan Timur untuk Computational Thinking · PPKap Universitas Siliwangi 2026</p>
+  <nav class="toc">
+    <a href="#s1">1. Masuk &amp; Asesmen Awal</a>
+    <a href="#s2">2. Jalur Belajar Siswa</a>
+    <a href="#s3">3. Halaman Pertemuan</a>
+    <a href="#s4">4. Motif Builder</a>
+    <a href="#s5">5. Umpan Balik Adaptif</a>
+    <a href="#s6">6. Kemajuanku</a>
+    <a href="#s7">7. Papan Kelas Guru</a>
+    <a href="#s8">8. Validasi Ahli</a>
+    <a href="#s9">9. Panel Peneliti</a>
+    <a href="#s10">10. Observasi</a>
+  </nav>
+</div></header>
+
+<div class="wrap">
+
+<section id="s1">
+<h2>1 · Masuk dan Asesmen Awal — S-01 s.d. S-03</h2>
+<p class="note">Siswa masuk dengan NIS dan PIN enam digit yang dicetak guru. Tidak butuh surel. Persetujuan penelitian dipisah dari akses belajar: siswa yang menolak tetap boleh belajar, datanya saja yang tidak dipakai.</p>
+<div class="row">
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div style="text-align:center;margin:14px 0 18px">
+      <div style="font:800 26px/1 ui-sans-serif;color:var(--accent);letter-spacing:.06em">GEULIS</div>
+      <div style="font-size:11px;color:var(--ink3);margin-top:5px">Belajar Transformasi Geometri<br>lewat Budaya Priangan Timur</div>
+    </div>
+    <span class="lbl">NIS</span><div class="input">0056781234</div>
+    <span class="lbl">PIN (6 digit)</span><div class="input">••••••</div>
+    <button class="btn">Masuk</button>
+    <button class="btn sec">Gabung kelas dengan kode</button>
+    <p style="font-size:11px;color:var(--ink3);text-align:center;margin-top:14px">Lupa PIN? Minta gurumu mengatur ulang.</p>
+  </div></div><p class="cap">S-01 Masuk</p></div>
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <p class="h">Persetujuan Penelitian</p>
+    <p class="t">Kegiatan belajarmu direkam untuk penelitian Universitas Siliwangi.</p>
+    <div class="box info" style="font-size:11.5px;line-height:1.55">
+      <b>Yang dikumpulkan:</b> jawaban latihan &amp; tes, waktu pengerjaan, karya yang kamu buat.<br><br>
+      <b>Yang TIDAK dikumpulkan:</b> NIK, alamat rumah, nomor HP, foto wajah.<br><br>
+      <b>Namamu diganti kode</b> (S-014) pada semua laporan dan artikel.
+    </div>
+    <div class="box" style="font-size:11.5px">☑ Saya bersedia data belajar saya dipakai untuk penelitian.</div>
+    <div class="box" style="font-size:11.5px">☐ Saya tidak bersedia — saya tetap ingin belajar di sini.</div>
+    <button class="btn">Lanjut</button>
+    <p style="font-size:10.5px;color:var(--ink3);text-align:center;margin-top:10px">Persetujuan orang tua diurus terpisah lewat sekolah.</p>
+  </div></div><p class="cap">S-02 Persetujuan</p></div>
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="appbar" style="margin:-16px -16px 12px"><span class="logo">GEULIS</span><span class="pill">1 dari 3</span></div>
+    <p class="h">Tes Kesiapan</p>
+    <p class="t">15 soal · ±20 menit · bukan penentu nilai rapor</p>
+    <div class="bar-track"><div class="bar-fill" style="width:33%"></div></div>
+    <div class="box">
+      <span class="lbl">Soal 5 dari 15</span>
+      <p style="font-size:12.5px;margin:0 0 10px">Titik <b>A(3, −2)</b> digeser 4 satuan ke kanan dan 1 satuan ke atas. Koordinat bayangannya adalah…</p>
+      <div class="grid2">
+        <div class="box" style="margin:0;padding:9px;font-size:12px">A. (7, −1)</div>
+        <div class="box" style="margin:0;padding:9px;font-size:12px">B. (−1, −1)</div>
+        <div class="box" style="margin:0;padding:9px;font-size:12px">C. (7, −3)</div>
+        <div class="box" style="margin:0;padding:9px;font-size:12px">D. (4, 1)</div>
+      </div>
+    </div>
+    <button class="btn">Berikutnya</button>
+    <div style="margin-top:14px;border-top:1px dashed var(--line);padding-top:10px">
+      <span class="lbl">Setelah ini</span>
+      <span class="pill">Angket Profil Belajar · 20 pernyataan</span>
+      <span class="pill">Minat Konteks Budaya · 6 pernyataan</span>
+    </div>
+  </div></div><p class="cap">S-03 Asesmen awal</p></div>
+
+</div>
+</section>
+
+<section id="s2">
+<h2>2 · Jalur Belajar Siswa — S-04</h2>
+<p class="note">Hasil Mesin Diferensiasi ditampilkan terbuka kepada siswa, bukan disembunyikan. Siswa perlu tahu bahwa jalurnya bisa berubah — itu justru pesan pedagogisnya: level bukan label, melainkan posisi sementara.</p>
+<div class="row">
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="appbar" style="margin:-16px -16px 12px"><span class="logo">GEULIS</span><span class="avatar"></span></div>
+    <p class="h">Halo, Reza 👋</p>
+    <div class="box acc">
+      <span class="lbl">Jalur belajarmu saat ini</span>
+      <span class="pill a">Level L2 · Berkembang</span>
+      <span class="pill a">Cara belajar: Visual-Manipulatif</span>
+      <span class="pill a">Konteks: Payung Geulis</span>
+      <p style="font-size:11px;color:var(--ink2);margin:8px 0 0">Jalur ini bisa berubah setiap kali kamu menyelesaikan pemeriksaan penguasaan.</p>
+    </div>
+    <span class="lbl">5 Pertemuan</span>
+    <div class="box ok">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><b style="font-size:13px">1 · Translasi</b><div style="font-size:11px;color:var(--ink2)">Anyaman Rajapolah</div></div>
+        <span class="pill g">Selesai · 88</span>
+      </div>
+    </div>
+    <div class="box" style="border-color:var(--accent2);border-width:2px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <div><b style="font-size:13px">2 · Refleksi</b><div style="font-size:11px;color:var(--ink2)">Batik sawoan Tasikmalaya</div></div>
+        <span class="pill a">Sedang berjalan</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:60%"></div></div>
+      <div style="font-size:11px;color:var(--ink2)">4 dari 7 bagian · lanjutkan di Latihan Berjenjang</div>
+      <button class="btn" style="margin-top:9px">Lanjutkan</button>
+    </div>
+    <div class="box" style="opacity:.55">
+      <b style="font-size:13px">3 · Rotasi</b> <span class="pill">Terkunci</span>
+      <div style="font-size:11px;color:var(--ink2)">Payung geulis</div>
+    </div>
+    <div class="box" style="opacity:.55"><b style="font-size:13px">4 · Dilatasi</b> <span class="pill">Terkunci</span></div>
+    <div class="box" style="opacity:.55"><b style="font-size:13px">5 · Komposisi + Proyek</b> <span class="pill">Terkunci</span></div>
+  </div></div><p class="cap">S-04 Jalur Belajarmu</p></div>
+
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>geulis.id/pertemuan/2</b></div><div class="scr">
+    <p class="h">Anatomi satu pertemuan — tujuh bagian tetap</p>
+    <p class="t">Struktur ini identik di kelima pertemuan, sehingga siswa tidak perlu belajar ulang cara memakai sistem, dan analisis data antar-pertemuan tetap sebanding.</p>
+    <div class="step"><span class="n">1</span>Jangkar Budaya — foto/video artefak asli + pertanyaan pemantik</div>
+    <div class="step"><span class="n">2</span>Eksplorasi GeoGebra — varian sesuai level &amp; modus</div>
+    <div class="step"><span class="n">3</span>Formalisasi — aturan transformasi, disajikan sesuai modus</div>
+    <div class="step"><span class="n">4</span>Latihan Berjenjang — butir sesuai level</div>
+    <div class="step" style="border-color:var(--accent2);background:var(--accent-bg)"><span class="n">5</span>PEMERIKSAAN PENGUASAAN → memicu Mesin Diferensiasi</div>
+    <div class="step"><span class="n">6</span>Motif Builder — tugas algoritmik (bukti CT)</div>
+    <div class="step"><span class="n">7</span>Refleksi — 2 pertanyaan terbuka (data kualitatif)</div>
+    <p class="legend">Bagian <code>2</code> dan <code>3</code> punya varian berbeda per <code>level × modus</code>. Bagian <code>1</code>, <code>5</code>, <code>6</code>, <code>7</code> sama untuk semua siswa agar datanya dapat dibandingkan.</p>
+  </div></div>
+
+</div>
+</section>
+
+<section id="s3">
+<h2>3 · Halaman Pertemuan — S-05 &amp; S-06</h2>
+<p class="note">Konten yang sama disajikan berbeda menurut modus belajar. Yang dibandingkan di bawah adalah unit yang sama — "Refleksi terhadap garis y = x" — untuk dua modus.</p>
+<div class="row">
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="appbar" style="margin:-16px -16px 12px"><span style="font-size:12px">← Pertemuan 2</span><span class="pill a">L2 · Visual</span></div>
+    <span class="lbl">Bagian 1 — Jangkar Budaya</span>
+    <div class="ph" style="height:130px;margin-bottom:10px">FOTO MOTIF BATIK SAWOAN<br>Tasikmalaya · dokumentasi lapangan</div>
+    <p style="font-size:10.5px;color:var(--ink3);margin:-4px 0 10px">Perajin: Ibu Enok S. · Cigeureung, Kota Tasikmalaya · 12 Mei 2026 · izin terlampir</p>
+    <div class="box acc">
+      <span class="lbl">Pertanyaan pemantik</span>
+      <p style="font-size:12.5px;margin:0">Kalau kain ini kamu lipat, di mana lipatannya supaya kedua sisi motifnya bertemu tepat? Ada berapa lipatan yang mungkin?</p>
+    </div>
+    <span class="lbl">Bagian 2 — Eksplorasi</span>
+    <div class="ph" style="height:170px;margin-bottom:8px">GEOGEBRA TERTANAM<br>(di-host sendiri)<br><br>motif + cermin yang bisa digeser</div>
+    <div class="box" style="font-size:11.5px">
+      <b>Coba sendiri:</b> geser garis cermin ke posisi <b>y = x</b>. Perhatikan apa yang terjadi pada koordinat titik-titik motif.
+    </div>
+    <button class="btn">Lanjut ke Formalisasi</button>
+  </div></div><p class="cap">S-05/S-06 · modus Visual-Manipulatif</p></div>
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="appbar" style="margin:-16px -16px 12px"><span style="font-size:12px">← Pertemuan 2</span><span class="pill b">L2 · Simbolik</span></div>
+    <span class="lbl">Bagian 3 — Formalisasi</span>
+    <div class="box">
+      <p style="font-size:12.5px;margin:0 0 8px"><b>Refleksi terhadap garis y = x</b></p>
+      <div style="font:600 13px var(--mono);background:#fafaf9;border:1px solid var(--line2);border-radius:6px;padding:11px;text-align:center">
+        (x, y) &nbsp;⟼&nbsp; (y, x)
+      </div>
+      <p style="font-size:11.5px;color:var(--ink2);margin:9px 0 0">Dalam bentuk matriks:</p>
+      <div style="font:600 12px var(--mono);background:#fafaf9;border:1px solid var(--line2);border-radius:6px;padding:11px;text-align:center;margin-top:6px">
+        M = [ 0&nbsp;&nbsp;1 ; 1&nbsp;&nbsp;0 ]
+      </div>
+    </div>
+    <div class="box info" style="font-size:11.5px">
+      <b>Pada motif batik:</b> setiap titik ragam hias yang berada pada koordinat (a, b) berpindah ke (b, a). Sumbu simetri diagonal motif inilah garis y = x.
+    </div>
+    <span class="lbl">Bagian 4 — Latihan Berjenjang</span>
+    <div class="box" style="font-size:12px">Tentukan bayangan segitiga <b>P(1,4), Q(3,4), R(3,1)</b> oleh refleksi terhadap garis y = x.</div>
+    <button class="btn">Periksa jawaban</button>
+  </div></div><p class="cap">S-05 · modus Simbolik-Analitis</p></div>
+
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>Admin · A-01 Manajemen varian konten</b></div><div class="scr">
+    <p class="h">Matriks varian — Unit 2.3 "Refleksi terhadap garis y = x"</p>
+    <p class="t">Sel bertanda <b>*</b> berlaku untuk semua nilai pada sumbu itu. Aturan ini menekan jumlah varian yang harus ditulis tim dari 9 menjadi 4.</p>
+    <table class="ui">
+      <tr><th>Level</th><th>Modus</th><th>Judul varian</th><th>Media</th><th>Status</th></tr>
+      <tr><td>L1</td><td>*</td><td>Lipatan kain: menemukan pola dengan mencoba</td><td>animasi + GeoGebra terpandu</td><td><span class="pill g">Siap</span></td></tr>
+      <tr><td>L2</td><td>visual</td><td>Cermin diagonal pada motif sawoan</td><td>GeoGebra bebas</td><td><span class="pill g">Siap</span></td></tr>
+      <tr><td>L2</td><td>simbolik / naratif</td><td>Aturan (x,y) ⟼ (y,x) dan matriksnya</td><td>teks + contoh</td><td><span class="pill w">Revisi</span></td></tr>
+      <tr><td>L3</td><td>*</td><td>Komposisi refleksi diagonal &amp; sifat non-komutatif</td><td>tantangan terbuka</td><td><span class="pill">Draf</span></td></tr>
+    </table>
+    <p class="legend">Total unit di seluruh sistem: ±35. Dengan rata-rata 4 varian per unit → ±140 varian konten harus diproduksi Bulan 5–8. <b>Ini beban kerja terbesar dalam proyek</b> dan harus dimulai paralel dengan Sprint 0, bukan setelah kodenya jadi.</p>
+  </div></div>
+
+</div>
+</section>
+
+<section id="s4">
+<h2>4 · Motif Builder — S-07 <span class="pill a" style="text-transform:none;letter-spacing:0">komponen orisinal · inti HKI</span></h2>
+<p class="note">Layar ini yang mengubah "transformasi geometri" menjadi "computational thinking" yang terukur. Siswa menyusun urutan perintah untuk merekonstruksi motif sasaran; sistem menilai kemiripan hasil dan efisiensi algoritmanya secara otomatis. Wajib dapat dipakai pada layar selebar 360 px.</p>
+<div class="row">
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="appbar" style="margin:-16px -16px 10px"><span style="font-size:12px">Motif Builder</span><span class="pill a">Pert. 3 · Rotasi</span></div>
+    <div class="grid2" style="margin-bottom:9px">
+      <div><span class="lbl">Sasaran</span><div class="ph" style="height:104px">ROZET PAYUNG<br>8 jari-jari</div></div>
+      <div><span class="lbl">Hasilmu</span><div class="ph" style="height:104px;border-color:var(--accent2)">KANVAS SVG<br>hidup</div></div>
+    </div>
+    <div class="box ok" style="padding:9px">
+      <div style="display:flex;justify-content:space-between;font-size:11.5px">
+        <span><b>Kemiripan 94%</b> · lolos ≥ 90</span><span class="pill g">✓ Lolos</span>
+      </div>
+      <div class="bar-track"><div class="bar-fill" style="width:94%;background:#16a34a"></div></div>
+      <div style="font-size:11px;color:var(--ink2)">Langkahmu 4 · minimum 3 · efisiensi 75%</div>
+    </div>
+    <span class="lbl">Algoritmamu</span>
+    <div class="step"><span class="n">1</span>MOTIF_DASAR( jari-jari )</div>
+    <div class="step"><span class="n">2</span>ULANGI 8 KALI</div>
+    <div class="step" style="margin-left:18px"><span class="n">3</span>ROTASI( pusat=O, sudut=45° )</div>
+    <div class="step"><span class="n">4</span>DILATASI( pusat=O, k=0,6 )</div>
+    <span class="lbl" style="margin-top:8px">Blok perintah</span>
+    <div>
+      <span class="pill a">TRANSLASI(a, b)</span><span class="pill a">REFLEKSI(garis)</span>
+      <span class="pill a">ROTASI(pusat, θ)</span><span class="pill a">DILATASI(pusat, k)</span>
+      <span class="pill b">ULANGI n KALI</span><span class="pill">MOTIF_DASAR</span>
+    </div>
+    <button class="btn">Jalankan &amp; nilai</button>
+    <button class="btn sec">Kirim sebagai jawaban</button>
+  </div></div><p class="cap">S-07 Motif Builder (siswa)</p></div>
+
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>Bagaimana skor CT dihitung</b></div><div class="scr">
+    <p class="h">Dari susunan blok ke bukti empat indikator CT</p>
+    <table class="ui">
+      <tr><th>Indikator CT</th><th>Perbuatan siswa di layar ini</th><th>Data yang tersimpan</th></tr>
+      <tr><td><b>Dekomposisi</b></td><td>Menandai bagian mana dari motif sasaran yang merupakan motif dasar</td><td><code>motif_dasar_ditandai</code>, ketepatan vs. kunci</td></tr>
+      <tr><td><b>Pengenalan pola</b></td><td>Menetapkan banyaknya pengulangan (8 jari-jari → ULANGI 8)</td><td><code>n_pengulangan</code>, benar/salah</td></tr>
+      <tr><td><b>Abstraksi</b></td><td>Mengisi parameter blok: sudut 45°, pusat O, k = 0,6</td><td><code>parameter_terisi</code>, ketepatan tiap argumen</td></tr>
+      <tr><td><b>Algoritma</b></td><td>Menyusun urutan blok yang benar dan seringkas mungkin</td><td><code>urutan_perintah</code> (JSON), <code>skor_kemiripan</code>, <code>langkah_siswa</code>, <code>efisiensi</code>, <code>percobaan_ke</code></td></tr>
+    </table>
+    <p class="legend" style="margin-top:14px"><b>Skor kemiripan</b> dihitung dengan <i>Intersection over Union</i> pada raster 200×200:<br>
+    <code>Kemiripan = (luas irisan / luas gabungan) × 100</code> &nbsp;·&nbsp; lolos bila ≥ 90<br>
+    <code>Efisiensi = (langkah_minimum / langkah_siswa) × 100</code> — dilaporkan terpisah, tidak menggugurkan kelulusan.</p>
+    <div class="box warn" style="margin-top:12px;font-size:12.5px">
+      <b>Catatan metodologis.</b> Skor Motif Builder adalah <i>bukti proses</i> yang memperkaya pembahasan. Instrumen utama untuk N-Gain dan uji-t tetap tes CT berbentuk soal, sesuai rancangan pada proposal.
+    </div>
+  </div></div>
+
+</div>
+</section>
+
+<section id="s5">
+<h2>5 · Umpan Balik Adaptif — S-08</h2>
+<p class="note">Setiap keputusan Mesin Diferensiasi dijelaskan kepada siswa dengan bahasa manusia, dan dicatat ke <code>adaptation_logs</code> dengan kode aturan. Sistem tidak boleh terasa seperti kotak hitam yang menghakimi.</p>
+<div class="row">
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="box ok" style="text-align:center">
+      <div style="font-size:26px">↑</div>
+      <p class="h" style="margin:4px 0">Kamu naik ke Level Mahir</p>
+      <p style="font-size:12px;color:var(--ink2);margin:0">Penguasaanmu pada <b>Refleksi</b> mencapai <b>0,86</b>. Latihan rutin dilewati — kamu langsung ke tugas pengayaan.</p>
+    </div>
+    <div class="box" style="font-size:11.5px">
+      <span class="lbl">Rincian</span>
+      Pemeriksaan: 5 dari 5 benar<br>
+      M sebelum 0,72 → M sesudah 0,86<br>
+      Level L2 → <b>L3</b>
+    </div>
+    <button class="btn">Buka tugas pengayaan</button>
+    <p style="font-size:10.5px;color:var(--ink3);text-align:center;margin-top:9px">Kode aturan: RULE_PROMOTE</p>
+  </div></div><p class="cap">S-08 · promosi</p></div>
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="box warn" style="text-align:center">
+      <div style="font-size:26px">↺</div>
+      <p class="h" style="margin:4px 0">Kita pelan-pelan dulu, ya</p>
+      <p style="font-size:12px;color:var(--ink2);margin:0">Bagian <b>refleksi terhadap garis y = x</b> masih goyah. Kamu akan melihat versi yang lebih terbimbing dulu, lalu mencoba lagi.</p>
+    </div>
+    <div class="box" style="font-size:11.5px">
+      <span class="lbl">Yang sering keliru</span>
+      Menukar posisi x dan y — ini bagian yang paling banyak salah, bukan cuma kamu.
+    </div>
+    <div class="box info" style="font-size:11.5px">
+      <span class="lbl">Yang akan kamu dapat</span>
+      • Animasi lipatan motif langkah demi langkah<br>
+      • GeoGebra terpandu dengan petunjuk<br>
+      • 4 soal serupa dengan angka berbeda
+    </div>
+    <button class="btn">Mulai</button>
+    <p style="font-size:10.5px;color:var(--ink3);text-align:center;margin-top:9px">Kode aturan: RULE_REMEDIATE · iterasi 1 dari 2</p>
+  </div></div><p class="cap">S-08 · remedial</p></div>
+
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="box info" style="text-align:center">
+      <div style="font-size:26px">🤝</div>
+      <p class="h" style="margin:4px 0">Bu Vepi akan membantumu</p>
+      <p style="font-size:12px;color:var(--ink2);margin:0">Kamu sudah dua kali mengulang bagian ini. Daripada mengulang lagi sendirian, gurumu sudah diberi tahu.</p>
+    </div>
+    <div class="box" style="font-size:11.5px">
+      Materi berikutnya <b>tetap dibuka</b> supaya kamu tidak tertinggal dari kelas.
+    </div>
+    <button class="btn">Lanjut ke Pertemuan 3</button>
+    <button class="btn sec">Ulangi sekali lagi</button>
+    <p style="font-size:10.5px;color:var(--ink3);text-align:center;margin-top:9px">Kode aturan: RULE_ESCALATE</p>
+  </div></div><p class="cap">S-08 · eskalasi ke guru</p></div>
+
+</div>
+</section>
+
+<section id="s6">
+<h2>6 · Kemajuanku — S-09</h2>
+<div class="row">
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="appbar" style="margin:-16px -16px 12px"><span style="font-size:12px">Kemajuanku</span><span class="avatar"></span></div>
+    <span class="lbl">Empat kemampuan berpikir komputasional</span>
+    <div class="box" style="padding:11px">
+      <div style="font-size:11.5px;display:flex;justify-content:space-between"><span>Dekomposisi</span><b>78</b></div>
+      <div class="bar-track"><div class="bar-fill" style="width:78%"></div></div>
+      <div style="font-size:11.5px;display:flex;justify-content:space-between"><span>Pengenalan pola</span><b>91</b></div>
+      <div class="bar-track"><div class="bar-fill" style="width:91%"></div></div>
+      <div style="font-size:11.5px;display:flex;justify-content:space-between"><span>Abstraksi</span><b>64</b></div>
+      <div class="bar-track"><div class="bar-fill" style="width:64%"></div></div>
+      <div style="font-size:11.5px;display:flex;justify-content:space-between"><span>Algoritma</span><b>70</b></div>
+      <div class="bar-track"><div class="bar-fill" style="width:70%"></div></div>
+    </div>
+    <span class="lbl">Penguasaan per pertemuan</span>
+    <div class="box" style="padding:11px">
+      <div class="ph" style="height:96px">GRAFIK GARIS<br>nilai M per unit materi</div>
+    </div>
+    <span class="lbl">Karyamu</span>
+    <div class="grid3">
+      <div class="ph" style="height:58px">Motif<br>P1</div>
+      <div class="ph" style="height:58px">Motif<br>P2</div>
+      <div class="ph" style="height:58px;opacity:.4">P3</div>
+    </div>
+    <p style="font-size:11px;color:var(--ink2);margin-top:10px">Semua motif yang kamu rancang tersimpan. Pada Pertemuan 5 kamu akan memilih salah satu untuk dikembangkan jadi proyek akhir.</p>
+  </div></div><p class="cap">S-09 Kemajuanku</p></div>
+
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>S-10 · Diferensiasi produk — siswa memilih bentuk tagihan</b></div><div class="scr">
+    <p class="h">Proyek Akhir Pertemuan 5 — pilih satu bentuk</p>
+    <p class="t">Konten ditentukan sistem berdasarkan bukti kinerja; proses ditentukan profil belajar; <b>produk dipilih siswa</b>. Pembagian ini disengaja — diferensiasi tidak berarti sistem mengambil alih semua keputusan.</p>
+    <div class="grid2">
+      <div class="box"><b style="font-size:12.5px">🎨 Desain Motif Orisinal</b><p style="font-size:11.5px;color:var(--ink2);margin:5px 0 0">Rancang motif baru di Motif Builder + tuliskan algoritmanya.</p></div>
+      <div class="box"><b style="font-size:12.5px">📄 Laporan Algoritmik</b><p style="font-size:11.5px;color:var(--ink2);margin:5px 0 0">Bedah motif artefak asli menjadi urutan transformasi bermatriks.</p></div>
+      <div class="box"><b style="font-size:12.5px">🎬 Video Penjelasan</b><p style="font-size:11.5px;color:var(--ink2);margin:5px 0 0">Jelaskan cara membaca transformasi pada payung geulis, maks 3 menit.</p></div>
+      <div class="box"><b style="font-size:12.5px">🖼 Poster Infografis</b><p style="font-size:11.5px;color:var(--ink2);margin:5px 0 0">Petakan motif budaya Priangan Timur ke jenis transformasinya.</p></div>
+    </div>
+    <p class="legend">Keempatnya dinilai dengan <b>rubrik analitik empat tingkat yang sama</b>, dengan kriteria: ketepatan matematis · kedalaman CT · keterkaitan konteks budaya · kejelasan komunikasi. Rubrik ditampilkan ke siswa <i>sebelum</i> mengerjakan.</p>
+  </div></div>
+</div>
+</section>
+
+<section id="s7">
+<h2>7 · Papan Kelas Guru — G-01 s.d. G-04</h2>
+<p class="note">Guru butuh satu layar yang menjawab satu pertanyaan: siapa yang perlu saya datangi hari ini? Segalanya yang lain sekunder.</p>
+<div class="row">
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>geulis.id/guru/kelas/XI-MIPA-3</b></div><div class="scr">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+      <div><p class="h" style="margin:0">XI MIPA 3 · SMAN 2 Tasikmalaya</p><p class="t" style="margin:2px 0 0">34 siswa · kelompok <b>eksperimen</b> · Pertemuan 2 berjalan</p></div>
+      <div><span class="pill g">31 aktif</span><span class="pill w">3 belum mulai</span></div>
+    </div>
+
+    <div class="box warn">
+      <span class="lbl">Perlu pendampingan langsung — 4 siswa</span>
+      <span class="pill w">S-014 · Reza · refleksi y=x · 2× remedial</span>
+      <span class="pill w">S-007 · Nadia · refleksi y=x · 2× remedial</span>
+      <span class="pill w">S-022 · Fikri · translasi · 3× remedial</span>
+      <span class="pill w">S-030 · Alya · belum mulai Pertemuan 2</span>
+      <p style="font-size:11.5px;color:var(--ink2);margin:8px 0 0"><b>Pola yang terlihat:</b> 11 dari 34 siswa tersendat di unit yang sama — refleksi terhadap garis y = x. Ini bukan masalah perorangan; pertimbangkan membahasnya klasikal.</p>
+    </div>
+
+    <span class="lbl">Peta panas penguasaan (M) per unit</span>
+    <table class="ui">
+      <tr><th>Siswa</th><th>1.1</th><th>1.2</th><th>1.3</th><th>2.1</th><th>2.2</th><th>2.3</th><th>Level</th><th></th></tr>
+      <tr><td>S-001 Ahmad</td>
+        <td><span class="hm" style="background:#16a34a"></span></td><td><span class="hm" style="background:#16a34a"></span></td>
+        <td><span class="hm" style="background:#16a34a"></span></td><td><span class="hm" style="background:#16a34a"></span></td>
+        <td><span class="hm" style="background:#65a30d"></span></td><td><span class="hm" style="background:#65a30d"></span></td>
+        <td><span class="pill g">L3</span></td><td><span class="pill">Ubah</span></td></tr>
+      <tr><td><b>S-014 Reza</b></td>
+        <td><span class="hm" style="background:#65a30d"></span></td><td><span class="hm" style="background:#65a30d"></span></td>
+        <td><span class="hm" style="background:#eab308"></span></td><td><span class="hm" style="background:#eab308"></span></td>
+        <td><span class="hm" style="background:#dc2626"></span></td><td><span class="hm" style="background:#e7e5e4"></span></td>
+        <td><span class="pill w">L1↓</span></td><td><span class="pill">Ubah</span></td></tr>
+      <tr><td>S-022 Fikri</td>
+        <td><span class="hm" style="background:#eab308"></span></td><td><span class="hm" style="background:#dc2626"></span></td>
+        <td><span class="hm" style="background:#dc2626"></span></td><td><span class="hm" style="background:#e7e5e4"></span></td>
+        <td><span class="hm" style="background:#e7e5e4"></span></td><td><span class="hm" style="background:#e7e5e4"></span></td>
+        <td><span class="pill w">L1</span></td><td><span class="pill">Ubah</span></td></tr>
+      <tr><td>S-030 Alya</td>
+        <td><span class="hm" style="background:#16a34a"></span></td><td><span class="hm" style="background:#16a34a"></span></td>
+        <td><span class="hm" style="background:#65a30d"></span></td><td><span class="hm" style="background:#e7e5e4"></span></td>
+        <td><span class="hm" style="background:#e7e5e4"></span></td><td><span class="hm" style="background:#e7e5e4"></span></td>
+        <td><span class="pill b">L2</span></td><td><span class="pill">Ubah</span></td></tr>
+    </table>
+    <p class="legend" style="margin-top:9px">
+      <span class="hm" style="background:#16a34a;vertical-align:-4px"></span> M ≥ 0,80 &nbsp;
+      <span class="hm" style="background:#65a30d;vertical-align:-4px"></span> 0,65–0,79 &nbsp;
+      <span class="hm" style="background:#eab308;vertical-align:-4px"></span> 0,50–0,64 &nbsp;
+      <span class="hm" style="background:#dc2626;vertical-align:-4px"></span> &lt; 0,50 &nbsp;
+      <span class="hm" style="background:#e7e5e4;vertical-align:-4px"></span> belum dikerjakan
+    </p>
+    <div class="box info" style="margin-top:12px">
+      <span class="lbl">Tombol "Ubah" — override guru</span>
+      <p style="font-size:12px;margin:0">Guru boleh memindahkan level siswa kapan saja, tetapi <b>wajib menuliskan alasannya</b>. Alasan itu tersimpan di <code>teacher_overrides</code> dan menjadi salah satu data kualitatif paling berharga dalam penelitian ini: di titik mana penilaian guru berbeda dari keputusan sistem, dan mengapa.</p>
+    </div>
+  </div></div>
+</div>
+</section>
+
+<section id="s8">
+<h2>8 · Validasi Ahli — V-01 &amp; V-02</h2>
+<p class="note">Validator masuk lewat tautan bertanda, tanpa perlu membuat akun. Skor mentah langsung diolah menjadi indeks Aiken's V, dan seluruh saran perbaikan otomatis tersusun jadi daftar tugas revisi.</p>
+<div class="row">
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>geulis.id/validasi/tautan-bertanda</b></div><div class="scr">
+    <p class="h">Lembar Validasi Ahli Materi</p>
+    <p class="t">Prof. Dr. ... · Aspek 2 dari 4 · 12 dari 28 butir terisi</p>
+    <div class="bar-track" style="margin-bottom:14px"><div class="bar-fill" style="width:43%"></div></div>
+    <table class="ui">
+      <tr><th style="width:46%">Pernyataan</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th style="width:28%">Saran perbaikan</th></tr>
+      <tr><td>Konteks batik sawoan tepat merepresentasikan konsep refleksi</td>
+        <td>○</td><td>○</td><td>○</td><td>○</td><td>●</td><td style="color:var(--ink3)">—</td></tr>
+      <tr><td>Penjenjangan L1–L2–L3 pada unit 2.3 runtut dan beralasan</td>
+        <td>○</td><td>○</td><td>○</td><td>●</td><td>○</td><td style="color:var(--ink3)">L1 masih agak melompat ke matriks</td></tr>
+      <tr><td>Butir pemeriksaan penguasaan mengukur indikator yang dimaksud</td>
+        <td>○</td><td>○</td><td>●</td><td>○</td><td>○</td><td style="color:var(--ink3)">Butir 3 mengukur hitungan, bukan abstraksi</td></tr>
+      <tr><td>Nilai α = 0,4 pada pembaruan penguasaan sudah wajar</td>
+        <td>○</td><td>○</td><td>○</td><td>●</td><td>○</td><td style="color:var(--ink3)">—</td></tr>
+    </table>
+    <p class="legend">Perhatikan baris terakhir: <b>parameter mesin adaptifnya sendiri ikut divalidasi ahli.</b> Inilah yang membedakan sistem berbasis aturan eksplisit dari model kotak hitam — parameternya bisa diperdebatkan, dipertanggungjawabkan, dan dilaporkan dalam artikel.</p>
+  </div></div>
+
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>V-02 · Rekap Aiken's V — peneliti</b></div><div class="scr">
+    <p class="h">Hasil Validasi · 5 penilai · skala 1–5</p>
+    <div class="grid3" style="margin-bottom:12px">
+      <div class="box ok" style="text-align:center;margin:0"><div style="font-size:22px;font-weight:800;color:var(--ok)">0,84</div><div style="font-size:11px;color:var(--ink2)">V keseluruhan</div></div>
+      <div class="box" style="text-align:center;margin:0"><div style="font-size:22px;font-weight:800">26/28</div><div style="font-size:11px;color:var(--ink2)">butir memenuhi</div></div>
+      <div class="box warn" style="text-align:center;margin:0"><div style="font-size:22px;font-weight:800;color:var(--warn)">2</div><div style="font-size:11px;color:var(--ink2)">butir perlu revisi</div></div>
+    </div>
+    <table class="ui">
+      <tr><th>Aspek</th><th>Butir</th><th>V</th><th>Kategori</th></tr>
+      <tr><td>Kelayakan materi</td><td>8</td><td><b>0,88</b></td><td><span class="pill g">Tinggi</span></td></tr>
+      <tr><td>Desain pembelajaran berdiferensiasi</td><td>7</td><td><b>0,86</b></td><td><span class="pill g">Tinggi</span></td></tr>
+      <tr><td>Integrasi etnomatematika</td><td>6</td><td><b>0,81</b></td><td><span class="pill g">Tinggi</span></td></tr>
+      <tr><td>Kelayakan sistem sebagai media</td><td>7</td><td><b>0,79</b></td><td><span class="pill b">Sedang</span></td></tr>
+      <tr style="background:var(--warn-bg)"><td colspan="2"><i>Butir 2.3.c — "butir pemeriksaan mengukur abstraksi"</i></td><td><b>0,55</b></td><td><span class="pill w">Rendah · revisi</span></td></tr>
+    </table>
+    <div class="box" style="margin-top:12px">
+      <span class="lbl">Rumus yang dipakai</span>
+      <div style="font:600 12px var(--mono);text-align:center;padding:6px">V = Σ(r − 1) / [ n × (5 − 1) ]</div>
+      <p style="font-size:11.5px;color:var(--ink2);margin:4px 0 0">Kriteria proposal: produk valid bila berada pada tingkat kevalidan <b>minimal sedang</b>.</p>
+    </div>
+    <button class="btn sec" style="margin-top:10px">Unduh rekap saran sebagai daftar tugas revisi (28 baris)</button>
+  </div></div>
+</div>
+</section>
+
+<section id="s9">
+<h2>9 · Panel Peneliti — P-01 s.d. P-03</h2>
+<p class="note">Papan kelengkapan data adalah fitur kecil dengan dampak besar. Data yang bolong dan baru ketahuan saat analisis adalah penyebab paling umum molornya penelitian pengembangan.</p>
+<div class="row">
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>P-01 · Kelengkapan data</b></div><div class="scr">
+    <p class="h">Kelengkapan Data — 3 sekolah · 6 kelas · 198 siswa</p>
+    <table class="ui">
+      <tr><th>Kelas</th><th>Kelompok</th><th>n</th><th>Asesmen awal</th><th>Pretest</th><th>P1–P5</th><th>Posttest</th><th>Angket</th></tr>
+      <tr><td>SMAN 2 Tsm · XI-3</td><td><span class="pill a">Eksperimen</span></td><td>34</td><td>34/34</td><td>34/34</td><td>31/34</td><td>—</td><td>—</td></tr>
+      <tr><td>SMAN 2 Tsm · XI-4</td><td><span class="pill">Kontrol</span></td><td>33</td><td>33/33</td><td>33/33</td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td>SMAN 1 Ciamis · XI-2</td><td><span class="pill a">Eksperimen</span></td><td>32</td><td>32/32</td><td>30/32</td><td>28/32</td><td>—</td><td>—</td></tr>
+      <tr style="background:var(--warn-bg)"><td>SMAN 1 Ciamis · XI-5</td><td><span class="pill">Kontrol</span></td><td>34</td><td>29/34</td><td><b>27/34</b></td><td>—</td><td>—</td><td>—</td></tr>
+      <tr><td>SMAN 1 Banjar · XI-1</td><td><span class="pill a">Eksperimen</span></td><td>33</td><td>33/33</td><td>33/33</td><td>33/33</td><td>—</td><td>—</td></tr>
+      <tr><td>SMAN 1 Banjar · XI-3</td><td><span class="pill">Kontrol</span></td><td>32</td><td>32/32</td><td>32/32</td><td>—</td><td>—</td><td>—</td></tr>
+    </table>
+    <div class="box warn" style="margin-top:12px;font-size:12.5px">
+      <b>Perhatian.</b> XI-5 Ciamis: 7 siswa belum mengerjakan pretest. Kejar sekarang — pretest yang hilang tidak bisa diambil ulang setelah pembelajaran dimulai, dan siswa itu gugur dari analisis N-Gain.
+    </div>
+  </div></div>
+
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>P-02 · Analitik penelitian</b></div><div class="scr">
+    <p class="h">N-Gain Tes CT — eksperimen vs. kontrol</p>
+    <div class="grid2" style="margin-bottom:12px">
+      <div class="box acc" style="margin:0"><span class="lbl">Eksperimen (n = 99)</span>
+        <div style="font-size:22px;font-weight:800;color:var(--accent)">0,62</div>
+        <div style="font-size:11px;color:var(--ink2)">N-Gain rerata · SD 0,14 · kategori sedang</div></div>
+      <div class="box" style="margin:0"><span class="lbl">Kontrol (n = 99)</span>
+        <div style="font-size:22px;font-weight:800">0,31</div>
+        <div style="font-size:11px;color:var(--ink2)">N-Gain rerata · SD 0,17 · kategori rendah</div></div>
+    </div>
+    <span class="lbl">Per indikator CT</span>
+    <table class="ui">
+      <tr><th>Indikator</th><th>Pre (E)</th><th>Post (E)</th><th>N-Gain E</th><th>N-Gain K</th></tr>
+      <tr><td>Dekomposisi</td><td>41,2</td><td>76,8</td><td><b>0,61</b></td><td>0,29</td></tr>
+      <tr><td>Pengenalan pola</td><td>48,5</td><td>83,1</td><td><b>0,67</b></td><td>0,35</td></tr>
+      <tr><td>Abstraksi</td><td>35,7</td><td>68,2</td><td><b>0,51</b></td><td>0,24</td></tr>
+      <tr><td>Algoritma</td><td>38,9</td><td>75,4</td><td><b>0,60</b></td><td>0,33</td></tr>
+    </table>
+    <div class="box info" style="margin-top:12px;font-size:12.5px">
+      <b>Uji-t dijalankan di SPSS/JASP, bukan di sistem ini.</b> Sistem hanya menyiapkan data yang bersih dan siap dianalisis. Statistik inferensial untuk artikel sebaiknya berasal dari perangkat lunak baku yang dapat diaudit reviewer, bukan dari kode buatan sendiri.
+    </div>
+    <p class="legend" style="margin-top:10px">Angka pada mockup ini adalah <b>contoh tampilan</b>, bukan hasil penelitian.</p>
+    <button class="btn sec" style="margin-top:6px">P-03 · Ekspor .xlsx 10 lembar (ID dianonimkan)</button>
+  </div></div>
+</div>
+</section>
+
+<section id="s10">
+<h2>10 · Lembar Observasi — O-01</h2>
+<p class="note">Diisi tiga pembantu lapangan lewat HP sambil berdiri di belakang kelas. Harus bisa selesai dalam lima menit dan bekerja tanpa sinyal.</p>
+<div class="row">
+  <div><div class="phone"><div class="bar"><span></span></div><div class="scr">
+    <div class="appbar" style="margin:-16px -16px 12px"><span style="font-size:12px">Observasi</span><span class="pill w">⚡ Mode luring</span></div>
+    <p class="h">SMAN 1 Banjar · XI-1</p>
+    <p class="t">Pertemuan 3 · Rotasi · 14 Okt 2026 · 07.30</p>
+    <div class="box" style="font-size:12px">
+      <span class="lbl">1. Siswa dapat masuk sistem tanpa kendala</span>
+      <span class="pill">1</span><span class="pill">2</span><span class="pill">3</span><span class="pill a">4</span>
+    </div>
+    <div class="box" style="font-size:12px">
+      <span class="lbl">2. Materi termuat lancar di perangkat siswa</span>
+      <span class="pill">1</span><span class="pill">2</span><span class="pill a">3</span><span class="pill">4</span>
+    </div>
+    <div class="box" style="font-size:12px">
+      <span class="lbl">3. Siswa memakai Motif Builder sesuai petunjuk</span>
+      <span class="pill">1</span><span class="pill">2</span><span class="pill">3</span><span class="pill a">4</span>
+    </div>
+    <div class="box" style="font-size:12px">
+      <span class="lbl">Catatan lapangan</span>
+      <div class="input" style="height:52px;margin:0">6 siswa memakai HP berlayar kecil; Motif Builder perlu diperbesar dua jari…</div>
+    </div>
+    <div class="box warn" style="font-size:11.5px">
+      <b>3 isian menunggu kirim.</b> Akan terkirim otomatis saat ada sinyal.
+    </div>
+    <button class="btn">Simpan</button>
+  </div></div><p class="cap">O-01 Lembar observasi (luring)</p></div>
+
+  <div class="desk"><div class="bar"><i></i><i></i><i></i><b>Prinsip rancangan yang berlaku di semua layar</b></div><div class="scr">
+    <div class="box"><b style="font-size:12.5px">Mobile-first, tanpa kecuali.</b><p style="font-size:12px;color:var(--ink2);margin:5px 0 0">Sebagian besar siswa akan membuka sistem ini dari HP, bukan lab komputer. Setiap layar — termasuk Motif Builder — wajib dapat digunakan pada lebar 360 px.</p></div>
+    <div class="box"><b style="font-size:12.5px">Tahan koneksi buruk.</b><p style="font-size:12px;color:var(--ink2);margin:5px 0 0">Materi pertemuan berikutnya disimpan di cache; jawaban diantre lokal dan dikirim ulang saat sinyal kembali. GeoGebra di-host sendiri, bukan dari CDN yang bisa diblokir sekolah.</p></div>
+    <div class="box"><b style="font-size:12.5px">Keputusan sistem selalu dijelaskan.</b><p style="font-size:12px;color:var(--ink2);margin:5px 0 0">Setiap kali sistem memindahkan level siswa, siswa diberi tahu alasannya dengan bahasa manusia. Guru melihat kode aturannya. Peneliti melihat seluruh jejaknya.</p></div>
+    <div class="box"><b style="font-size:12.5px">Level bukan label.</b><p style="font-size:12px;color:var(--ink2);margin:5px 0 0">Bahasa antarmuka tidak pernah menyebut siswa "lemah" atau "pintar". Yang disebut adalah posisi sementara pada satu unit materi, dan selalu disertai jalan keluarnya.</p></div>
+    <div class="box"><b style="font-size:12.5px">Atribusi budaya selalu tampil.</b><p style="font-size:12px;color:var(--ink2);margin:5px 0 0">Setiap foto artefak menampilkan nama motif, perajin atau sumbernya, lokasi, dan tanggal dokumentasi. Ini soal etika terhadap komunitas yang karyanya kita pakai — sekaligus memperkuat keabsahan klaim etnomatematikanya.</p></div>
+  </div></div>
+</div>
+</section>
+
+<p style="text-align:center;color:var(--ink3);font-size:12px;border-top:1px solid var(--line);padding-top:22px;margin-top:40px">
+Wireframe LMS GEULIS v1.0 · Pendamping dokumen <b>CETAK-BIRU-LMS-CT.md</b> · Angka dan nama pada mockup adalah contoh tampilan, bukan data penelitian.
+</p>
+
+</div>
+</body>
+</html>

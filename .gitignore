@@ -1,0 +1,61 @@
+# ── Laravel ────────────────────────────────────────────
+/vendor
+/node_modules
+/public/build
+/public/hot
+/public/storage
+/storage/*.key
+/storage/pail
+/bootstrap/cache/*
+!/bootstrap/cache/.gitkeep
+.env
+.env.backup
+.env.production
+.phpunit.result.cache
+.phpunit.cache
+Homestead.json
+Homestead.yaml
+auth.json
+npm-debug.log
+yarn-error.log
+
+# ── Perkakas ───────────────────────────────────────────
+/.idea
+/.vscode
+/.fleet
+.DS_Store
+Thumbs.db
+*.swp
+
+# ── Claude Code ────────────────────────────────────────
+.claude/settings.local.json
+.claude/PERINGATAN-GIT.txt
+CLAUDE.local.md
+
+# ── GEULIS ─────────────────────────────────────────────
+# Unggahan siswa dan aset besar tidak masuk repo.
+/storage/app/produk-siswa/*
+/storage/app/aset-budaya/*
+!/storage/app/**/.gitkeep
+
+# Bundel GeoGebra yang di-host sendiri: besar dan bukan ciptaan kita.
+# Unduh saat pemasangan; jangan ikut dalam berkas HKI.
+/public/geogebra/*
+!/public/geogebra/.gitkeep
+
+# Ekspor data penelitian TIDAK PERNAH masuk Git — memuat data siswa.
+/storage/app/ekspor/*
+*.xlsx
+*.sav
+
+# ── Filament (aset terbit ulang saat filament:upgrade) ─
+/public/css/filament
+/public/js/filament
+/public/fonts/filament
+/public/fonts-manifest.dev.json
+_ide_helper.php
+.phpactor.json
+*.log
+
+# ── Bundel vibecoding asli — sumbernya di "LMS CT/04-vibecoding", bukan bagian aplikasi ─
+/vibecoding/

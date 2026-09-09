@@ -1,0 +1,50 @@
+---
+description: Aturan Mesin Diferensiasi, penskoran Motif Builder, dan penghitung instrumen penelitian
+globs: app/Services/Differentiation/**,app/Services/Motif/**,app/Services/Research/**,tests/Unit/**,config/geulis.php
+alwaysApply: false
+---
+
+# Mesin Diferensiasi dan penghitung penelitian
+
+Ini bagian kode paling berbahaya di seluruh proyek. Kesalahannya tidak terlihat di layar dan baru ketahuan setelah data satu semester terlanjur terkumpul. Perlakukan setiap perubahan di sini seperti perubahan pada instrumen penelitian, karena memang itulah statusnya.
+
+## Rumus dan ambang
+
+```
+Penempatan awal   R < 60 → L1 ;  60 ≤ R < 80 → L2 ;  R ≥ 80 → L3
+Penguasaan        M_baru = α·M_lama + (1−α)·s        dengan α = 0,4
+Motif Builder     Kemiripan = (irisan ÷ gabungan) × 100, lolos ≥ 90
+                  Efisiensi = (langkah_minimum ÷ langkah_siswa) × 100
+Aiken's V         V = Σ(r − l₀) ÷ [ n · (c − l₀) ]
+N-Gain            (post − pre) ÷ (maks − pre)
+```
+
+Seluruh parameter tinggal di `config/geulis.php`, **tidak pernah ditanam di dalam logika**, karena ikut divalidasi ahli dan wajib dilaporkan apa adanya di bagian metode artikel.
+
+## Enam aturan keputusan
+
+| Kondisi | Kode aturan |
+|---|---|
+| M ≥ 0,80 dan level < L3 | `RULE_PROMOTE` |
+| M ≥ 0,80 dan level = L3 | `RULE_ENRICH` |
+| 0,50 ≤ M < 0,80 | `RULE_REINFORCE` |
+| M < 0,50, remedial ≤ 2 | `RULE_REMEDIATE` |
+| M < 0,50, remedial > 2 | `RULE_ESCALATE` |
+| durasi < 20% median kelas dan skor rendah | `RULE_GUESS_GUARD` |
+
+## Batas pengaman yang wajib tetap ada
+
+- Perpindahan level **maksimal satu tingkat** per pemeriksaan.
+- Tidak pernah turun di bawah L1, tidak pernah naik di atas L3.
+- `RULE_GUESS_GUARD` diperiksa **lebih dahulu** dan **tidak mengubah** nilai M maupun level.
+- Guru boleh mengesampingkan keputusan sistem, tetapi `alasan` wajib diisi.
+- Setiap keputusan menulis satu baris ke `adaptation_logs`.
+
+Setiap batas di atas punya kasus uji. Kalau sebuah perubahan membuat salah satunya merah, perubahannya yang salah.
+
+## Yang tidak boleh dilakukan
+
+- Menambahkan pemanggilan basis data ke dalam kelas Service.
+- Mengganti aturan eksplisit dengan model statistik atau LLM. Sistem harus bisa dijelaskan kepada validator — itu inti kebaruannya, bukan keterbatasannya.
+- Mengubah ambang atau α tanpa konfirmasi apakah validasi ahli sudah berjalan.
+- Menghitung uji-t di dalam sistem. Sistem hanya menyiapkan data; statistik inferensial dijalankan di SPSS/JASP supaya dapat diaudit *reviewer*.

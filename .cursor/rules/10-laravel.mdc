@@ -1,0 +1,40 @@
+---
+description: Konvensi kode Laravel, Eloquent, migrasi, dan pengujian pada proyek GEULIS
+globs: app/**/*.php,database/**/*.php,routes/**/*.php,tests/**/*.php,config/**/*.php
+alwaysApply: false
+---
+
+# Konvensi Laravel — GEULIS
+
+## Pembagian tanggung jawab
+
+- **`app/Services/`** adalah logika murni: tanpa Eloquent, tanpa fasad, tanpa `request()`, tanpa `auth()`. Masukan lewat argumen, keluaran lewat nilai balik. Alasannya bukan kerapian melainkan kebutuhan — kelas ini harus bisa diuji tanpa basis data dan harus bisa dijelaskan kepada validator ahli yang tidak membaca kode Laravel.
+- **Model** tipis: relasi, `$fillable`, `$casts`, dan *scope* seperlunya. Tanpa logika bisnis.
+- **Controller** tipis: validasi, panggil service, kembalikan tampilan. Tanpa logika bisnis.
+- **Komponen Livewire** mengurus keadaan antarmuka, bukan aturan pembelajaran.
+- Penyimpanan hasil keputusan Mesin Diferensiasi dikerjakan lapisan *recorder* terpisah, bukan di dalam mesinnya.
+
+## Migrasi
+
+- Jangan menyunting migrasi yang sudah dijalankan di lingkungan mana pun selain lokal — buat migrasi baru.
+- Setiap kolom keputusan otomatis wajib punya pasangan kolom alasan atau konteks. Angka tanpa alasan tidak berguna saat menulis artikel.
+- Simpan skor mentah, bukan hanya hasil olahan, supaya analisis ulang tetap mungkin.
+- `kelompok_riset` melekat pada kelas, bukan pada siswa — sesuai desain kuasi-eksperimen kelas utuh.
+
+## Pengujian (Pest)
+
+- `tests/Unit/` untuk logika murni: Mesin Diferensiasi, `MotifScorer`, `AikenCalculator`, `NGainCalculator`.
+- `tests/Feature/` untuk alur pengguna.
+- Angka pada uji dihitung tangan lebih dahulu dan ditulis di komentar. Kalau nanti rumusnya "diperbaiki" dan uji jadi merah, rumusnya yang salah — bukan ujinya.
+- Setiap perbaikan kesalahan dimulai dari uji yang gagal lebih dahulu.
+
+## Jebakan yang sudah pernah menggigit proyek ini
+
+**Kunci array bertipe float dipaksa jadi integer oleh PHP.** `[0.80 => 'tinggi', 0.40 => 'sedang', 0.00 => 'rendah']` runtuh menjadi satu kunci `0`, sehingga semua nilai berkategori sama — tanpa galat apa pun. Selalu pakai pasangan: `[[0.80, 'tinggi'], [0.40, 'sedang'], [0.00, 'rendah']]`. Ini pernah terjadi pada `AikenCalculator` dan `NGainCalculator`; jangan dikembalikan.
+
+## Sebelum commit
+
+```bash
+docker exec geulis-php ./vendor/bin/pint
+docker exec geulis-php php artisan test
+```
