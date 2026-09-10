@@ -5,11 +5,15 @@ use App\Http\Controllers\Guru\PinCardController;
 use App\Http\Controllers\Siswa\ConsentController;
 use App\Livewire\Guru\Beranda as GuruBeranda;
 use App\Livewire\Guru\DetailKelas;
+use App\Livewire\Guru\Pendampingan;
+use App\Livewire\Guru\PenilaianUraian;
 use App\Livewire\Siswa\AsesmenAwal;
 use App\Livewire\Siswa\Jalur;
 use App\Livewire\Siswa\MotifBuilder;
 use App\Livewire\Siswa\Pertemuan;
+use App\Livewire\Siswa\TesCt;
 use App\Livewire\Siswa\Unit;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -46,6 +50,7 @@ Route::middleware(['auth', 'role:siswa'])->prefix('belajar')->name('siswa.')->gr
         Route::get('/pertemuan/{meeting}', Pertemuan::class)->name('pertemuan');                   // S-05
         Route::get('/unit/{lessonUnit}', Unit::class)->name('unit');                               // S-05/S-06/S-08
         Route::get('/motif/{activity}', MotifBuilder::class)->name('motif');                       // S-07
+        Route::get('/tes-ct/{ctTest}', TesCt::class)->name('tes-ct');                              // S-11
     });
 });
 
@@ -54,4 +59,7 @@ Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(f
     Route::get('/', GuruBeranda::class)->name('beranda');                                        // G-00
     Route::get('/kelas/{classroom}', DetailKelas::class)->name('kelas');                         // G-00 detail
     Route::get('/kartu-pin/{classroom}', [PinCardController::class, 'cetak'])->name('kartu-pin'); // G-05
+    Route::get('/penilaian-uraian', PenilaianUraian::class)->name('penilaian-uraian');            // G-03 (uraian CT)
+    Route::get('/pendampingan', Pendampingan::class)->name('pendampingan');                        // G-04
+    Route::get('/siswa/{user}', fn (User $user) => redirect()->route('guru.beranda'))->name('siswa'); // G-02 (sementara)
 });

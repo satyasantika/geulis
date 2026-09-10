@@ -24,6 +24,20 @@
         </div>
         <p class="mt-3 text-xs text-tinta-3">Titik mulai bisa berubah seiring kemajuanmu — ini posisi sementara, bukan label.</p>
 
+        @foreach ($tesAktif as $t)
+            <div class="mt-4 rounded-xl border-2 border-aksen bg-aksen-latar p-4" wire:key="tes-{{ $t['tes']->id }}">
+                <div class="text-xs text-aksen">{{ $t['tes']->jenis === 'pretest' ? 'Tes awal' : 'Tes akhir' }} · {{ $t['tes']->durasi_menit }} menit</div>
+                <div class="font-semibold">{{ $t['tes']->judul }}</div>
+                @if ($t['skor']?->dikumpulkan_pada)
+                    <div class="mt-1 text-xs text-ok">Sudah dikumpulkan.</div>
+                @else
+                    <a href="{{ route('siswa.tes-ct', $t['tes']) }}" wire:navigate class="mt-3 block rounded-lg bg-aksen px-4 py-2 text-center text-sm font-semibold text-white">
+                        {{ $t['skor'] ? 'Lanjutkan tes' : 'Mulai tes' }}
+                    </a>
+                @endif
+            </div>
+        @endforeach
+
         <h2 class="mt-6 font-semibold">Lima pertemuan</h2>
         <ol class="mt-3 space-y-3">
             @foreach ($jalur as $baris)

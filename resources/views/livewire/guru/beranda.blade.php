@@ -2,6 +2,11 @@
     <h1 class="text-xl font-bold">Selamat datang, {{ auth()->user()->nama }}</h1>
     <p class="mt-1 text-sm text-tinta-2">Kelas yang Anda ampu.</p>
 
+    <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
+        <a href="{{ route('guru.penilaian-uraian') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Penilaian uraian</a>
+        <a href="{{ route('guru.pendampingan') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Perlu pendampingan</a>
+    </div>
+
     <div class="mt-5 space-y-3">
         @forelse ($daftarKelas as $kelas)
             <a href="{{ route('guru.kelas', $kelas) }}" wire:navigate

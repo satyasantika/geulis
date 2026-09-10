@@ -165,6 +165,16 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(MotifSubmission::class);
     }
 
+    public function ctResponses(): HasMany
+    {
+        return $this->hasMany(CtResponse::class);
+    }
+
+    public function ctScores(): HasMany
+    {
+        return $this->hasMany(CtScore::class);
+    }
+
     /** Enrollment aktif — posisi adaptif siswa saat ini. */
     public function enrollmentAktif(): ?Enrollment
     {
