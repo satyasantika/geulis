@@ -93,7 +93,9 @@ final class MotifScorer
             // Dekomposisi: ketepatan menandai motif dasar sebelum membangun
             'dekomposisi' => [
                 'ditandai' => count($motifDasarDitandai),
-                'diharapkan' => count($kunci['motif_dasar'] ?? []),
+                // Bila kunci menyebut semua indeks yang sah (mis. tiap kelopak rozet),
+                // jumlah tanda yang diharapkan diberikan terpisah — biasanya 1.
+                'diharapkan' => (int) ($kunci['jumlah_motif_dasar'] ?? count($kunci['motif_dasar'] ?? [])),
                 'tepat' => $this->irisanTepat($motifDasarDitandai, $kunci['motif_dasar'] ?? []),
             ],
             // Pengenalan pola: menetapkan banyaknya pengulangan
@@ -123,11 +125,41 @@ final class MotifScorer
             return false;
         }
 
-        if (is_numeric($acuan) && is_numeric($perintah[$param])) {
-            return abs((float) $perintah[$param] - (float) $acuan) < 0.001;
+        // Satu operasi boleh punya beberapa nilai sah (mis. refleksi terhadap x DAN y):
+        // {"garis": {"salah_satu": ["x", "y"]}}
+        if (is_array($acuan) && array_key_exists('salah_satu', $acuan)) {
+            foreach ($acuan['salah_satu'] as $pilihan) {
+                if ($this->nilaiCocok($perintah[$param], $pilihan)) {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
-        return $perintah[$param] == $acuan;
+        return $this->nilaiCocok($perintah[$param], $acuan);
+    }
+
+    private function nilaiCocok(mixed $nilai, mixed $acuan): bool
+    {
+        if (is_array($acuan) && is_array($nilai)) {
+            if (count($acuan) !== count($nilai)) {
+                return false;
+            }
+            foreach ($acuan as $i => $a) {
+                if (! $this->nilaiCocok($nilai[$i] ?? null, $a)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        if (is_numeric($acuan) && is_numeric($nilai)) {
+            return abs((float) $nilai - (float) $acuan) < 0.001;
+        }
+
+        return $nilai == $acuan;
     }
 
     private function irisanTepat(array $ditandai, array $kunci): int

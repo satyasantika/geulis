@@ -30,6 +30,11 @@ class Activity extends Model
         return $this->hasMany(ActivityAttempt::class);
     }
 
+    public function motifSubmissions(): HasMany
+    {
+        return $this->hasMany(MotifSubmission::class);
+    }
+
     /**
      * @return array<string, string>
      */

@@ -121,13 +121,21 @@
         </form>
     @endif
 
-    {{-- Motif Builder: Sprint 3 --}}
-    @if ($unit->tipe === 'motif' && ! $selesai)
-        <div class="mt-6 rounded-xl border border-dashed border-garis p-4 text-sm text-tinta-3">Motif Builder sedang disiapkan. Untuk sementara, lanjutkan ke refleksi.</div>
+    {{-- Motif Builder (S-07) --}}
+    @if ($unit->tipe === 'motif')
+        @if ($motif)
+            <a href="{{ route('siswa.motif', $motif) }}" wire:navigate class="mt-6 block rounded-xl border-2 border-aksen bg-aksen-latar p-4">
+                <div class="text-xs text-aksen">Motif Builder</div>
+                <div class="font-semibold">{{ $motif->judul }}</div>
+                <div class="mt-1 text-xs text-tinta-2">Tandai motif dasar, susun perintah transformasi, lalu nilai kemiripannya.</div>
+            </a>
+        @elseif (! $selesai)
+            <div class="mt-6 rounded-xl border border-dashed border-garis p-4 text-sm text-tinta-3">Motif sasaran untuk pertemuan ini belum disiapkan. Lanjutkan ke refleksi.</div>
+        @endif
     @endif
 
     {{-- Navigasi --}}
-    @if ($selesai || (! $kuis && $unit->tipe !== 'refleksi'))
+    @if ($selesai || (! $kuis && $unit->tipe !== 'refleksi' && ! $motif))
         <div class="mt-6 flex gap-2">
             @if ($selesai && $berikut)
                 <a href="{{ route('siswa.unit', $berikut) }}" wire:navigate class="flex-1 rounded-lg bg-aksen px-4 py-3 text-center font-semibold text-white">Lanjut ke {{ $berikut->judul }}</a>

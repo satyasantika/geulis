@@ -32,6 +32,35 @@ Berkas ini punya tiga pembaca, dan ketiganya penting:
 
 ---
 
+## 2026-09-10 · Sprint 3 · Motif Builder — Sprint 3 selesai
+
+**Selesai**
+- `MesinTransformasi` (PHP, murni): MOTIF_DASAR, TRANSLASI, REFLEKSI (x, y, y=x, y=−x), ROTASI, DILATASI, ULANGI n KALI dengan semantik "hasil terakhir"; validasi bentuk perintah dengan pesan untuk siswa; batas 400 bangun; `hitungLangkah()`, `ratakan()`.
+- `Rasterizer` (PHP, murni): poligon → kisi boolean 200×200 (aturan genap-ganjil, kotak pembatas). Raster rozet 8 kelopak: 19 ms.
+- `resources/js/motif-builder.js` (orisinal): mesin transformasi JS cermin dari PHP, raster + IoU untuk pratinjau, komponen Alpine (Penanda Motif → susun blok → hasil). **Paritas diuji**: JS dan PHP menghasilkan 11.374 sel terisi dan IoU 51,5 % yang identik untuk masukan sama.
+- `MotifScorer` diperluas: `kunci.parameter[op][param] = {salah_satu: [...]}` untuk beberapa nilai sah, perbandingan vektor per elemen, `kunci.jumlah_motif_dasar` untuk jumlah tanda yang diharapkan.
+- `PenilaiMotif` (lapisan penyimpanan): menjalankan ulang perintah siswa DAN acuan di server, merasterkan, menilai, menyimpan `motif_submissions` (+ cuplikan SVG dari klien, ≤ 60 KB); `buktiCT()` dihitung ulang dari kiriman.
+- S-07 Livewire + Alpine: dua kanvas SVG (sasaran/hasil, 2 kolom pada 360 px), penanda motif dengan ketuk, palet blok, penyunting parameter dengan `inputmode` angka, ULANGI satu tingkat (cukup untuk HP), pratinjau kemiripan langsung, kirim → hasil; "lanjutkan" tersedia setelah 3 percobaan tersimpan.
+- `MotifSasaranSeeder`: motif sasaran kelima pertemuan (kisi anyaman 3×3 via 2 ULANGI+TRANSLASI; sawoan via 3 REFLEKSI; rozet 8 via ULANGI 8 ROTASI 45°; berlapis via DILATASI k=2, k=−1; komposisi geser-lalu-putar) beserta `langkah_minimum` dan kunci CT — dipanggil `DatabaseSeeder`.
+- Livewire dibundel manual (`livewire.esm` + `@livewireScriptConfig`) agar `Alpine.data('motifBuilder')` terdaftar sebelum Alpine mulai. A-01 Aktivitas menerima konfigurasi Motif Builder sebagai JSON.
+- 149 uji hijau; keempat "Selesai bila" Sprint 3 terpenuhi (benar → ≥ 90 lolos; lebih panjang tetap lolos dengan efisiensi 25 %; `buktiCT()` keempat indikator; tata letak 2 kolom pada 360 px — belum dicoba di HP fisik).
+
+**Tidak selesai**
+- Uji di perangkat sungguhan (brief: "uji di perangkat sungguhan, bukan penyempit jendela") — perlu HP tim.
+- Seret-lepas blok: disengaja diganti tombol ▲▼ karena lebih andal untuk ibu jari; bisa ditambah nanti tanpa mengubah data.
+
+**Keputusan desain**
+- **Skor dihitung di server dari urutan perintah, bukan dari raster klien.** Raster klien hanya pratinjau; yang dikirim adalah perintah + cuplikan SVG. Mencegah pemalsuan skor dan membuat penilaian dapat direproduksi untuk artikel.
+- **Semantik "hasil terakhir"**: tiap perintah bekerja pada bangun yang baru lahir; setelah ULANGI, kelompoknya menjadi "hasil terakhir". Konsisten untuk siswa ("perintah berikutnya menggeser yang barusan") dan membuat kisi 2-D cukup dua ULANGI.
+- `ULANGI 8 KALI ROTASI 45°` menghasilkan 8 kelopak (rotasi ke-8 menimpa asli) supaya angka pengulangan = banyak jari-jari — cocok dengan kunci `n_pengulangan`.
+- `langkah` tidak menghitung MOTIF_DASAR; ULANGI dihitung 1 + isi badannya, sehingga perulangan dihargai (rozet: 2 langkah vs 8).
+- Setelah 3 percobaan belum lolos, siswa boleh melanjutkan agar pengunci pertemuan tidak menyandera; semua percobaan tetap tersimpan sebagai data proses.
+
+**Sesi berikutnya**
+- Sprint 4: bank soal CT, S-11 tes CT tahan putus koneksi, penskoran & antrean uraian, rubrik produk, S-10, S-09, G-01 papan kelas, G-02 rapor + override, G-03 penilaian rubrik.
+
+**Commit:** `feat(motif): motif builder — mesin transformasi, kanvas svg, penskoran iou`
+
 ## 2026-09-10 · Sprint 2 · pertemuan, varian konten, GeoGebra swadaya — Sprint 2 selesai
 
 **Selesai**

@@ -241,6 +241,7 @@ class Unit extends Component
             'varian' => $varian,
             'aset' => $varian?->culturalAsset,
             'kuis' => $this->aktivitasKuis(),
+            'motif' => $this->aktivitas()->first(fn (Activity $a) => $a->tipe === 'motif_builder'),
             'pertanyaanRefleksi' => $this->pertanyaanRefleksi(),
             'selesai' => $kemajuan->unitSelesai($siswa, $unit),
             'berikut' => $berikut,

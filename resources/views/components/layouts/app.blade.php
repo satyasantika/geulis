@@ -34,5 +34,6 @@
             Penelitian Kompetitif Universitas Siliwangi 2026
         </footer>
     </div>
+    @livewireScriptConfig
 </body>
 </html>

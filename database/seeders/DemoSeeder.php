@@ -28,7 +28,7 @@ class DemoSeeder extends Seeder
 {
     public function run(): void
     {
-        $this->call([RoleSeeder::class, ReadinessItemSeeder::class, MeetingSeeder::class]);
+        $this->call([RoleSeeder::class, ReadinessItemSeeder::class, MeetingSeeder::class, MotifSasaranSeeder::class]);
 
         $sekolah = School::query()->firstOrCreate(['npsn' => '20210001'], [
             'nama' => 'SMAN 1 Contoh Tasikmalaya', 'kabupaten_kota' => 'Kota Tasikmalaya',

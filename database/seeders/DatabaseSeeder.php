@@ -30,6 +30,7 @@ class DatabaseSeeder extends Seeder
         $admin->berikanPeran(Peran::Admin, Peran::Peneliti);
 
         // Kerangka 5 pertemuan x 7 unit; isi kontennya lewat panel admin, bukan seeder.
-        $this->call(MeetingSeeder::class);
+        // Motif sasaran Motif Builder ikut kerangka: strukturnya bagian dari mesin penilaian.
+        $this->call([MeetingSeeder::class, MotifSasaranSeeder::class]);
     }
 }

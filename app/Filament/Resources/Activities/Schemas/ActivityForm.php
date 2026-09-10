@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Activities\Schemas;
 
+use App\Models\Activity;
 use App\Models\LessonUnit;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
@@ -52,8 +53,13 @@ class ActivityForm
             Section::make('Motif Builder')
                 ->visible(fn (Get $get): bool => $get('tipe') === 'motif_builder')
                 ->schema([
-                    Textarea::make('konfigurasi.json')->label('Konfigurasi JSON (motif sasaran, blok, kunci)')->rows(8)
-                        ->helperText('Diisi pada Sprint 3; struktur lihat docs.')->columnSpanFull(),
+                    Textarea::make('konfigurasi_motif')->label('Konfigurasi JSON (kisi, motif_dasar, sasaran, blok, langkah_minimum, kunci)')
+                        ->rows(14)->rules(['nullable', 'json'])->dehydrated(false)
+                        ->afterStateHydrated(fn (Textarea $component, ?Activity $record) => $component->state(
+                            $record?->tipe === 'motif_builder' ? json_encode($record->konfigurasi, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) : null,
+                        ))
+                        ->helperText('Struktur lihat database/seeders/MotifSasaranSeeder.php. Perintah: MOTIF_DASAR, TRANSLASI{vektor}, REFLEKSI{garis}, ROTASI{pusat,sudut}, DILATASI{pusat,k}, ULANGI{n,badan}.')
+                        ->columnSpanFull(),
                 ])->columnSpanFull(),
         ])->columns(2);
     }

@@ -16,4 +16,19 @@ class EditActivity extends EditRecord
             DeleteAction::make(),
         ];
     }
+
+    /**
+     * Konfigurasi Motif Builder ditulis sebagai JSON mentah di formulir.
+     *
+     * @param  array<string, mixed>  $data
+     * @return array<string, mixed>
+     */
+    protected function mutateFormDataBeforeSave(array $data): array
+    {
+        if (($data['tipe'] ?? null) === 'motif_builder' && filled($this->data['konfigurasi_motif'] ?? null)) {
+            $data['konfigurasi'] = json_decode($this->data['konfigurasi_motif'], true) ?? [];
+        }
+
+        return $data;
+    }
 }
