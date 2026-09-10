@@ -1,6 +1,6 @@
 <x-layouts.app judul="Masuk">
     <div class="my-6 text-center">
-        <div class="text-3xl font-extrabold tracking-widest text-aksen">GEULIS</div>
+        <a href="{{ route('beranda') }}" class="inline-block text-3xl font-extrabold tracking-widest text-aksen focus:outline-none focus:ring-2 focus:ring-aksen/40">GEULIS</a>
         <p class="mt-2 text-sm text-tinta-3">Belajar Transformasi Geometri<br>lewat Budaya Priangan Timur</p>
     </div>
 

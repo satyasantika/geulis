@@ -106,8 +106,13 @@ describe('S-01 masuk', function (): void {
 });
 
 describe('beranda', function (): void {
-    it('sends guests to the login form', function (): void {
-        get('/')->assertRedirect(route('masuk'));
+    it('shows the landing page to guests', function (): void {
+        get('/')
+            ->assertOk()
+            ->assertSee('GEULIS')
+            ->assertSee('Delapan kelopak')
+            ->assertSee('Masuk belajar')
+            ->assertSee('Depi Ardian Nugraha');
         get('/belajar')->assertRedirect(route('masuk'));
     });
 

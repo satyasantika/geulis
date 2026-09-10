@@ -10,10 +10,10 @@ class ExampleTest extends TestCase
     use RefreshDatabase;
 
     /**
-     * Beranda mengarahkan tamu ke S-01; rincian per peran diuji di Auth/LoginTest.
+     * Tamu melihat beranda publik; rincian per peran diuji di Auth/LoginTest.
      */
     public function test_the_application_responds_on_the_root_path(): void
     {
-        $this->get('/')->assertRedirect('/masuk');
+        $this->get('/')->assertOk()->assertSee('GEULIS');
     }
 }

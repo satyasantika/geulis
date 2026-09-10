@@ -39,9 +39,13 @@ use Illuminate\Support\Facades\Route;
 */
 
 // ---------- Publik ----------
-Route::get('/', fn () => auth()->check()
-    ? redirect(auth()->user()->rutePulang())
-    : redirect()->route('masuk'))->name('beranda');
+Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect(auth()->user()->rutePulang());
+    }
+
+    return view('beranda');
+})->name('beranda');
 
 Route::middleware('guest')->group(function (): void {
     Route::get('/masuk', [LoginController::class, 'form'])->name('masuk');            // S-01

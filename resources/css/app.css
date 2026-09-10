@@ -22,4 +22,20 @@
     --color-garis-2: #e7e5e4;
     --color-ok: #15803d;
     --color-peringatan: #b45309;
+
+    --animate-putar-kelopak: putar-kelopak 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.12s both;
+}
+
+@keyframes putar-kelopak {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(45deg);
+    }
+}
+
+.beranda-rozet {
+    transform-box: view-box;
+    transform-origin: 120px 120px;
 }
