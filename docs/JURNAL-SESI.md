@@ -32,6 +32,30 @@ Berkas ini punya tiga pembaca, dan ketiganya penting:
 
 ---
 
+## 2026-09-10 · Sprint 4 · tes CT, rubrik, papan kelas — Sprint 4 selesai
+
+**Selesai**
+- Model `CtTest`, `CtItem`, `CtResponse`, `CtScore` (+ migrasi `dikumpulkan_pada`), `Rubric`, `RubricCriteria`, `Product`, `RubricScore`, `TeacherOverride`. Seeder `CtTestSeeder` (pretest & posttest paralel, 8 butir, 2 per indikator, rubrik butir 0–4) dan `RubricSeeder` (4 kriteria × 4 tingkat, bobot 25 %).
+- `PenskorTesCt` (murni: PG/isian otomatis, rekap per indikator, `lengkap` bila uraian sudah dinilai), `PencatatTesCt` (mulai/pewaktu/autosave/kumpulkan/nilai uraian/hitung ulang), `PenskorRubrik` (murni), `PengesampinganGuru` (override + alasan wajib ≥ 10 karakter), `PapanKelasService` (peta panas, pendampingan, belum mulai, pola ≥ 30 % tersendat).
+- S-11 tes CT: pewaktu dari waktu mulai server (+ toleransi 90 detik), autosave per butir ke server DAN localStorage; antrean kirim ulang saat `online`; kumpul mengirim seluruh jawaban (localStorage menang). S-10 unggah produk (4 bentuk, rubrik tampil sebelum mengerjakan, berkas privat disk `local` ≤ 2 MB, kuota 10 MB, tautan untuk video). S-09 Kemajuanku (bar CT per indikator, grafik SVG M per pertemuan, galeri motif, umpan balik rubrik).
+- G-01 papan kelas (peta panas M per pemeriksaan, daftar pendampingan + belum mulai, pola klasikal, tombol Ubah → override), G-02 rapor siswa (jejak `adaptation_logs`, override, tes CT, bukti CT Motif Builder), G-03 penilaian rubrik + antrean uraian CT, G-04 pendampingan lintas kelas. Filament A-xx: Tes CT & Butir.
+- 173 uji hijau. Keempat "Selesai bila" Sprint 4 terpenuhi (peta panas dari data nyata; override tersimpan dengan alasan; `perlu_pendampingan` muncul di daftar guru; tes CT utuh meski koneksi putus — diuji lewat jalur "kumpul membawa semua jawaban").
+
+**Tidak selesai**
+- Video produk hanya lewat tautan (batas unggah PHP 2 MB di server sekolah). Galeri karya belum menampilkan pratinjau berkas produk (hanya SVG motif).
+
+**Keputusan desain**
+- **Tahan putus koneksi = dua lapis**: server per butir + localStorage; pada kumpul, klien mengirim semua jawaban sehingga jawaban yang gagal tersinkron tetap dihitung. Tidak memakai Service Worker/PWA penuh — cukup untuk kasus "Wi-Fi putus di tengah tes" tanpa menambah kompleksitas.
+- **Pewaktu di server**: `ct_scores.created_at` = mulai; klien hanya menghitung mundur dari `sisaDetik`. Mencegah manipulasi jam HP.
+- **Override tidak menulis ke `adaptation_logs`** (jejak mesin) melainkan ke `teacher_overrides` (jejak guru) — keduanya append-only di praktik; guru "menandai sudah didampingi" hanya melepas `perlu_pendampingan` pada status kini.
+- **Berkas produk privat** (disk `local`, rute berotorisasi: pemilik / guru kelas / peneliti / admin) — karya siswa bukan konten publik.
+- Rekap `ct_scores` dihitung ulang setiap uraian dinilai; `dihitung_pada` hanya terisi bila seluruh butir punya skor — supaya N-Gain tidak dihitung dari tes yang setengah dinilai.
+
+**Sesi berikutnya**
+- Sprint 5: instrumen validasi + tautan bertanda V-01, Aiken V-02, angket respons, O-01 observasi luring, P-01 kelengkapan, P-02 analitik N-Gain, `geulis:ekspor` xlsx anonim.
+
+**Commit:** `feat(guru): rubrik produk, kemajuanku, papan kelas dengan override, rapor siswa`
+
 ## 2026-09-10 · Sprint 3 · Motif Builder — Sprint 3 selesai
 
 **Selesai**

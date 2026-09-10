@@ -23,6 +23,7 @@
             </div>
         </div>
         <p class="mt-3 text-xs text-tinta-3">Titik mulai bisa berubah seiring kemajuanmu — ini posisi sementara, bukan label.</p>
+        <a href="{{ route('siswa.kemajuan') }}" wire:navigate class="mt-3 block rounded-xl border border-garis bg-white p-3 text-center text-sm font-semibold">Kemajuanku →</a>
 
         @foreach ($tesAktif as $t)
             <div class="mt-4 rounded-xl border-2 border-aksen bg-aksen-latar p-4" wire:key="tes-{{ $t['tes']->id }}">
@@ -55,6 +56,9 @@
                                 </span>
                             </div>
                         </a>
+                        @if ($m->urutan === 5)
+                            <a href="{{ route('siswa.produk', $m) }}" wire:navigate class="mt-1 block rounded-xl border border-dashed border-aksen px-4 py-2 text-center text-xs font-semibold text-aksen">Proyek akhir: pilih bentuk karyamu →</a>
+                        @endif
                     @else
                         <div class="rounded-xl border border-dashed border-garis p-4 text-tinta-3">
                             <div class="text-xs">Pertemuan {{ $m->urutan }} · {{ ucfirst($m->materi) }}</div>

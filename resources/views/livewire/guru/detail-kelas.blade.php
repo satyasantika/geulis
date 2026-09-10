@@ -3,6 +3,8 @@
     <h1 class="mt-2 text-xl font-bold">{{ $kelas->nama }}</h1>
     <p class="text-sm text-tinta-2">{{ $kelas->school?->nama }} · {{ $kelas->tahun_ajaran }} · kode gabung <span class="font-mono font-semibold">{{ $kelas->kode_gabung }}</span></p>
 
+    <a href="{{ route('guru.papan', $kelas) }}" wire:navigate class="mt-3 block rounded-xl border-2 border-aksen bg-aksen-latar p-3 text-sm font-semibold text-aksen">Buka papan kelas → siapa yang perlu didatangi hari ini</a>
+
     @foreach ($pesan as $p)
         <p class="mt-3 rounded-lg border border-ok/40 bg-green-50 px-3 py-2 text-sm text-ok">{{ $p }}</p>
     @endforeach

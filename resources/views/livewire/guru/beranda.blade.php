@@ -5,6 +5,9 @@
     <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
         <a href="{{ route('guru.penilaian-uraian') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Penilaian uraian</a>
         <a href="{{ route('guru.pendampingan') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Perlu pendampingan</a>
+        @foreach (\App\Models\Meeting::query()->where('terbit', true)->orderBy('urutan')->get() as $mtg)
+            <a href="{{ route('guru.penilaian', $mtg) }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Nilai produk P{{ $mtg->urutan }}</a>
+        @endforeach
     </div>
 
     <div class="mt-5 space-y-3">

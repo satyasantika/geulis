@@ -175,6 +175,16 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(CtScore::class);
     }
 
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class);
+    }
+
+    public function overridesDiterima(): HasMany
+    {
+        return $this->hasMany(TeacherOverride::class, 'siswa_id');
+    }
+
     /** Enrollment aktif — posisi adaptif siswa saat ini. */
     public function enrollmentAktif(): ?Enrollment
     {

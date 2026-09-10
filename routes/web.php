@@ -2,18 +2,23 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Guru\PinCardController;
+use App\Http\Controllers\Produk\ProductFileController;
 use App\Http\Controllers\Siswa\ConsentController;
 use App\Livewire\Guru\Beranda as GuruBeranda;
 use App\Livewire\Guru\DetailKelas;
+use App\Livewire\Guru\PapanKelas;
 use App\Livewire\Guru\Pendampingan;
+use App\Livewire\Guru\PenilaianRubrik;
 use App\Livewire\Guru\PenilaianUraian;
+use App\Livewire\Guru\RaporSiswa;
 use App\Livewire\Siswa\AsesmenAwal;
 use App\Livewire\Siswa\Jalur;
+use App\Livewire\Siswa\Kemajuan;
 use App\Livewire\Siswa\MotifBuilder;
 use App\Livewire\Siswa\Pertemuan;
+use App\Livewire\Siswa\Produk;
 use App\Livewire\Siswa\TesCt;
 use App\Livewire\Siswa\Unit;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -51,8 +56,13 @@ Route::middleware(['auth', 'role:siswa'])->prefix('belajar')->name('siswa.')->gr
         Route::get('/unit/{lessonUnit}', Unit::class)->name('unit');                               // S-05/S-06/S-08
         Route::get('/motif/{activity}', MotifBuilder::class)->name('motif');                       // S-07
         Route::get('/tes-ct/{ctTest}', TesCt::class)->name('tes-ct');                              // S-11
+        Route::get('/kemajuan', Kemajuan::class)->name('kemajuan');                                // S-09
+        Route::get('/produk/{meeting}', Produk::class)->name('produk');                            // S-10
     });
 });
+
+// Berkas produk siswa: privat, diotorisasi di controller (pemilik / guru kelas / peneliti / admin).
+Route::get('/produk/{product}/berkas', ProductFileController::class)->middleware('auth')->name('produk.berkas');
 
 // ---------- Guru ----------
 Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(function (): void {
@@ -61,5 +71,7 @@ Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(f
     Route::get('/kartu-pin/{classroom}', [PinCardController::class, 'cetak'])->name('kartu-pin'); // G-05
     Route::get('/penilaian-uraian', PenilaianUraian::class)->name('penilaian-uraian');            // G-03 (uraian CT)
     Route::get('/pendampingan', Pendampingan::class)->name('pendampingan');                        // G-04
-    Route::get('/siswa/{user}', fn (User $user) => redirect()->route('guru.beranda'))->name('siswa'); // G-02 (sementara)
+    Route::get('/kelas/{classroom}/papan', PapanKelas::class)->name('papan');                     // G-01
+    Route::get('/siswa/{user}', RaporSiswa::class)->name('siswa');                                // G-02
+    Route::get('/penilaian/{meeting}', PenilaianRubrik::class)->name('penilaian');                // G-03
 });
