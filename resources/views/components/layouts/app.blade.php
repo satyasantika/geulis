@@ -6,6 +6,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ isset($judul) ? $judul.' · ' : '' }}{{ config('app.name', 'GEULIS') }}</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    @stack('kepala')
 </head>
 {{-- Lebar dasar 360 px: satu kolom, tombol setinggi jempol, tanpa sidebar. --}}
 <body class="min-h-dvh bg-latar font-sans text-tinta antialiased">
@@ -23,6 +24,9 @@
         @endif
 
         <main class="flex-1">
+            @if (session('pesan'))
+                <p class="mb-4 rounded-lg border border-peringatan/40 bg-aksen-latar px-3 py-2 text-sm text-peringatan">{{ session('pesan') }}</p>
+            @endif
             {{ $slot }}
         </main>
 

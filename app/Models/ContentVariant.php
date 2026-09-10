@@ -2,12 +2,17 @@
 
 namespace App\Models;
 
+use Database\Factories\ContentVariantFactory;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ContentVariant extends Model
 {
+    /** @use HasFactory<ContentVariantFactory> */
+    use HasFactory;
+
     protected $fillable = [
         'lesson_unit_id', 'level', 'modus', 'judul', 'badan_konten',
         'cultural_asset_id', 'konfigurasi_geogebra', 'status',

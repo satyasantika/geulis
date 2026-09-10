@@ -150,6 +150,22 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasMany(AdaptationLog::class);
     }
 
+    public function unitProgress(): HasMany
+    {
+        return $this->hasMany(LessonUnitProgress::class);
+    }
+
+    public function activityAttempts(): HasMany
+    {
+        return $this->hasMany(ActivityAttempt::class);
+    }
+
+    /** Enrollment aktif — posisi adaptif siswa saat ini. */
+    public function enrollmentAktif(): ?Enrollment
+    {
+        return $this->enrollments()->where('status', 'aktif')->first();
+    }
+
     /** Kelas aktif pertama tempat siswa terdaftar. */
     public function kelasAktif(): ?Classroom
     {

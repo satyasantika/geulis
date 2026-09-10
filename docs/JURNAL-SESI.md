@@ -32,6 +32,32 @@ Berkas ini punya tiga pembaca, dan ketiganya penting:
 
 ---
 
+## 2026-09-10 · Sprint 2 · pertemuan, varian konten, GeoGebra swadaya — Sprint 2 selesai
+
+**Selesai**
+- Migrasi baru `lesson_unit_progress` (kemajuan per bagian; dasar pengunci pertemuan). Model `CulturalAsset` (atribusi wajib ditegakkan lewat event `saving` → `AsetBudayaTanpaAtribusi`), `Activity`, `ActivityAttempt`, `LessonUnitProgress`, `Reflection`; factory untuk konten.
+- `VariantResolver` (memakai `pilihVarian()` mesin; hanya varian `siap`), `PenskorKuis` (murni: proporsi, butir salah berlabel, median durasi), `KemajuanSiswa` (tandai selesai, unit/pertemuan terbuka, ringkasan jalur).
+- Filament A-01: resource Pertemuan (terbit), Varian konten (level × modus dengan `*`, RichEditor, konfigurasi GeoGebra), Aset budaya (izin `accepted`, unggah ke disk `public`), Aktivitas (repeater butir kuis, pertanyaan refleksi).
+- GeoGebra Math Apps Bundle 5.4 dipasang di `public/geogebra/` (117 MB, di luar Git) + perintah `php artisan geulis:pasang-geogebra` untuk memasangnya ulang di server mana pun; komponen Blade `<x-geogebra>` memuat `deployggb.js` swadaya dengan `setHTML5Codebase(..., true)` dan menjalankan perintah awal per varian.
+- Layar siswa Livewire: S-04 Jalur (lima pertemuan + kunci), S-05 Pertemuan (tujuh bagian), S-05/S-06/S-08 Unit (varian sesuai level & modus, atribusi aset, GeoGebra, kuis latihan, pemeriksaan penguasaan → `AdaptationRecorder` → umpan balik dengan kode aturan, coba lagi pada remedial dengan varian level baru, refleksi dua pertanyaan).
+- `DemoSeeder` (tidak dipanggil `DatabaseSeeder`): sekolah, guru `guru1`, kelas, 3 siswa ber-PIN tetap, konten contoh Pertemuan 1. Uji asap HTTP: masuk → persetujuan → jalur → asesmen 200; `deployggb.js` dan `web3d` tersaji dari localhost.
+- 127 uji hijau. Seluruh "Selesai bila" Sprint 2 terpenuhi (varian L1 vs L3 berbeda, GeoGebra tanpa internet, aset tanpa izin ditolak, atribusi tampil).
+
+**Tidak selesai**
+- Unit Motif Builder masih placeholder "lanjut" (Sprint 3). Latihan penguatan otomatis dari `butir_salah` baru berupa daftar konsep, belum set soal terpilih.
+
+**Keputusan desain**
+- **Bundel GeoGebra di luar Git** (lisensi non-komersial, bukan bagian ciptaan HKI) tetapi dapat direproduksi lewat perintah artisan — lebih jujur untuk berkas HKI daripada menyalin 117 MB kode pihak ketiga ke repo.
+- **Atribusi ditegakkan di model**, bukan hanya formulir: seeder/tinker pun tidak bisa menyimpan aset tanpa izin. Formulir Filament menolak lebih dulu dengan pesan ramah.
+- **Kolom `modus` varian hanya satu nilai atau `*`** (kolom 10 karakter); "simbolik/naratif" pada wireframe diwujudkan sebagai dua baris atau `*`.
+- **Pemeriksaan penguasaan = aktivitas kuis pada unit `memicu_adaptasi`**; latihan = kuis biasa tanpa adaptasi. Median durasi kelas dihitung dari percobaan siswa lain pada aktivitas yang sama (sinyal `RULE_GUESS_GUARD`).
+- Unit dianggap selesai pada PROMOTE/ENRICH/REINFORCE/ESCALATE; pada REMEDIATE dan GUESS_GUARD siswa mengulang dengan percobaan baru — level pada enrollment sudah turun sehingga `VariantResolver` otomatis menyajikan perancah.
+
+**Sesi berikutnya**
+- Sprint 3: Motif Builder (kanvas SVG, blok perintah, mesin transformasi JS, rasterisasi, `MotifScorer`, Penanda Motif, `motif_submissions`, motif sasaran 5 pertemuan).
+
+**Commit:** `feat(konten): varian konten, geogebra swadaya, layar pertemuan, dan pengunci`
+
 ## 2026-09-10 · Sprint 1 · asesmen awal, penempatan, dan perekam adaptasi — Sprint 1 selesai
 
 **Selesai**

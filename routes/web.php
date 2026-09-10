@@ -6,6 +6,9 @@ use App\Http\Controllers\Siswa\ConsentController;
 use App\Livewire\Guru\Beranda as GuruBeranda;
 use App\Livewire\Guru\DetailKelas;
 use App\Livewire\Siswa\AsesmenAwal;
+use App\Livewire\Siswa\Jalur;
+use App\Livewire\Siswa\Pertemuan;
+use App\Livewire\Siswa\Unit;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,8 +40,10 @@ Route::middleware(['auth', 'role:siswa'])->prefix('belajar')->name('siswa.')->gr
     Route::post('/persetujuan', [ConsentController::class, 'simpan'])->name('persetujuan.simpan');
 
     Route::middleware('persetujuan')->group(function (): void {
-        Route::view('/', 'siswa.jalur')->name('jalur');                                          // S-04 (kerangka)
+        Route::get('/', Jalur::class)->name('jalur');                                             // S-04
         Route::get('/asesmen-awal', AsesmenAwal::class)->name('asesmen');                          // S-03
+        Route::get('/pertemuan/{meeting}', Pertemuan::class)->name('pertemuan');                   // S-05
+        Route::get('/unit/{lessonUnit}', Unit::class)->name('unit');                               // S-05/S-06/S-08
     });
 });
 

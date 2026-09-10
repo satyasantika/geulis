@@ -26,7 +26,7 @@ class ClassroomResource extends Resource
 
     protected static ?string $pluralModelLabel = 'kelas';
 
-    protected static ?string $recordTitleAttribute = 'nama';
+    protected static ?int $navigationSort = 3;
 
     public static function form(Schema $schema): Schema
     {

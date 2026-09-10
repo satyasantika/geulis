@@ -3,35 +3,35 @@
 > Salin isi satu sprint dari `SPRINT-BRIEF.md` ke bawah garis ini saat sprint itu dimulai.
 > Tandai `[x]` pada butir yang sudah selesai. Berkas ini dibaca agen koding setiap sesi.
 
-**Sprint aktif:** 2 — Pertemuan, varian konten, GeoGebra
+**Sprint aktif:** 3 — Motif Builder
 **Mulai:** 2026-09-10
-**Target selesai:** Bulan 6–7
+**Target selesai:** Bulan 7
 
 ---
 
 ## Sasaran
 
-Dua siswa berlevel berbeda membuka unit yang sama dan melihat varian konten yang berbeda.
+Siswa menyusun urutan perintah transformasi, menjalankannya, dan mendapat skor kemiripan otomatis.
 
 ## Butir pekerjaan
 
-- [x] `MeetingSeeder`: kerangka 5 pertemuan × 7 unit
-- [ ] Panel admin A-01: kelola varian konten `level` × `modus`, termasuk `*`
-- [ ] `VariantResolver`: memilih varian paling spesifik (`pilihVarian()`)
-- [ ] Layar S-05 halaman pertemuan, tujuh bagian, kemajuan per bagian
-- [ ] GeoGebra swadaya di `public/geogebra/`, tanpa CDN
-- [ ] Komponen Livewire pembungkus GeoGebra per varian
-- [ ] CRUD aset budaya dengan atribusi wajib di lapisan model
-- [ ] Pengunci pertemuan
+- [ ] Kanvas SVG dengan kisi koordinat, ramah sentuh, 360 px
+- [ ] Blok perintah: `MOTIF_DASAR`, `TRANSLASI`, `REFLEKSI`, `ROTASI`, `DILATASI`, `ULANGI n KALI`
+- [ ] Mesin transformasi JavaScript
+- [ ] Rasterisasi 200 × 200, kirim ke server
+- [ ] Sambungkan ke `MotifScorer` — IoU, ambang 90, efisiensi terpisah
+- [ ] Alat Penanda Motif (bukti dekomposisi)
+- [ ] Simpan ke `motif_submissions` + cuplikan SVG
+- [ ] Motif sasaran untuk lima pertemuan
 
 ## Selesai bila
 
-- [ ] Satu unit punya empat varian dan siswa L1 serta L3 melihat yang berbeda
-- [ ] GeoGebra termuat tanpa akses internet keluar
-- [ ] Aset budaya tanpa `izin_diperoleh` ditolak saat disimpan
-- [ ] Atribusi tampil di layar siswa
+- [ ] Susunan benar → kemiripan ≥ 90, lolos
+- [ ] Susunan lebih panjang tetap lolos, efisiensi lebih rendah
+- [ ] Bisa dikerjakan dengan ibu jari di 360 px
+- [ ] `buktiCT()` menghasilkan data keempat indikator
 
 ## Catatan berjalan
 
-- 2026-09-10 — Sprint 0 dan 1 selesai. Alur siswa: `/masuk` → `/belajar/persetujuan` → `/belajar/asesmen-awal` → `/belajar`.
+- 2026-09-10 — Sprint 0–2 selesai. Data contoh lokal: `php artisan db:seed --class=DemoSeeder` (guru `guru1`/`password`; siswa NIS `0056781234` PIN `482913`).
 - Akun seed: username `admin`, surel `admin@geulis.test`, kata sandi `password` (ganti sebelum dipakai di sekolah).
