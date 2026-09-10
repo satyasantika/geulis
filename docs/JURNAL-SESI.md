@@ -32,6 +32,31 @@ Berkas ini punya tiga pembaca, dan ketiganya penting:
 
 ---
 
+## 2026-09-10 · Sprint 0 · kelas, impor CSV, kartu PIN, persetujuan — Sprint 0 selesai
+
+**Selesai**
+- Model `Consent`, `Enrollment`; relasi `Classroom::siswa()`, `User::classrooms()`, `kelasDiampu()`, `consent()`; factory `School`, `Classroom`.
+- `PembacaCsvSiswa` (murni: koma/titik koma, BOM Excel, judul kolom urutan bebas, galat per baris), `PembangkitPin` (6 digit, tolak pola), `PendaftarSiswa` (akun + peran siswa + kode anonim + enrollment; atur ulang PIN).
+- Layar guru Livewire: G-00 beranda (daftar kelas + buat kelas dengan kode gabung otomatis), detail kelas (impor CSV, tambah satu siswa, PIN baru, keluarkan), G-05 kartu PIN cetak (A4, 3 kolom, garis gunting, hitam-putih, tanpa Vite).
+- S-02 persetujuan penelitian + middleware `persetujuan` (siswa wajib menjawab sekali; menolak tetap boleh belajar).
+- Filament A-02: resource Sekolah dan Kelas berlabel Indonesia, filter kelompok riset, hitung siswa.
+- 86 uji hijau. Seluruh butir "Selesai bila" Sprint 0 terpenuhi.
+
+**Tidak selesai**
+- "Gabung kelas dengan kode" untuk siswa (opsi pada wireframe S-01) — belum perlu karena siswa didaftarkan guru lewat CSV; dicatat di IDE-TAHUN-DEPAN bila kelak dibutuhkan.
+
+**Keputusan desain**
+- **Format CSV**: kolom `nama, nis, jenis_kelamin` (L/P), sesuai brief; PIN **dibangkitkan sistem**, bukan ikut di CSV, supaya guru tidak menyimpan daftar PIN di berkas lepas.
+- **PIN disimpan dua kali**: hash di `password` untuk verifikasi, terenkripsi APP_KEY di `pin_kartu` (migrasi baru, bukan menyunting migrasi lama) supaya kartu bisa dicetak ulang kapan saja. Tanpa ini, tiap cetak ulang harus mengatur ulang PIN seluruh kelas — persis gangguan yang ingin dihindari di hari pengambilan data.
+- **`kode_anonim` berurutan global** `S-001`… (guru tidak diberi kode; hanya siswa diekspor). Global agar tidak bentrok saat tiga sekolah digabung; sekolah/kelas tetap kolom terpisah saat ekspor.
+- Kelas `PendaftarSiswa` menyentuh Eloquent dan tinggal di `app/Services/Kelas/` bersama kelas murni — mengikuti pola `AdaptationRecorder` yang disebut cetak biru: logika murni dan lapisan penyimpanan berdampingan, tetapi kelas murni tidak pernah mengimpor model.
+- Kartu PIN tanpa Vite/Tailwind: halaman cetak harus mandiri agar tetap bisa dicetak dari HP guru tanpa aset besar.
+
+**Sesi berikutnya**
+- Sprint 1: tes kesiapan, angket profil & minat, `PlacementService`, `AdaptationRecorder`, S-03, A-03.
+
+**Commit:** `feat(guru): kelas, impor csv siswa, kartu pin, dan persetujuan penelitian`
+
 ## 2026-09-10 · Sprint 0 · autentikasi NIS + PIN, enam peran, middleware `role:`
 
 **Selesai**

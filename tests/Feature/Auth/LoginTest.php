@@ -123,6 +123,7 @@ describe('beranda', function (): void {
 
     it('lets a student see their empty learning path at 360 px', function (): void {
         $siswa = User::factory()->siswa()->create(['nama' => 'Reza']);
+        $siswa->consent()->create(['setuju_data_penelitian' => true, 'disetujui_pada' => now()]);
 
         actingAs($siswa)->get('/belajar')
             ->assertOk()

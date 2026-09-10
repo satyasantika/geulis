@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Guru\PinCardController;
+use App\Http\Controllers\Siswa\ConsentController;
+use App\Livewire\Guru\Beranda as GuruBeranda;
+use App\Livewire\Guru\DetailKelas;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,10 +32,17 @@ Route::redirect('/login', '/masuk')->name('login');
 
 // ---------- Siswa ----------
 Route::middleware(['auth', 'role:siswa'])->prefix('belajar')->name('siswa.')->group(function (): void {
-    Route::view('/', 'siswa.jalur')->name('jalur');                                  // S-04 (kerangka)
+    Route::get('/persetujuan', [ConsentController::class, 'form'])->name('persetujuan');          // S-02
+    Route::post('/persetujuan', [ConsentController::class, 'simpan'])->name('persetujuan.simpan');
+
+    Route::middleware('persetujuan')->group(function (): void {
+        Route::view('/', 'siswa.jalur')->name('jalur');                                          // S-04 (kerangka)
+    });
 });
 
 // ---------- Guru ----------
 Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(function (): void {
-    Route::view('/', 'guru.beranda')->name('beranda');                               // G-00 (kerangka)
+    Route::get('/', GuruBeranda::class)->name('beranda');                                        // G-00
+    Route::get('/kelas/{classroom}', DetailKelas::class)->name('kelas');                         // G-00 detail
+    Route::get('/kartu-pin/{classroom}', [PinCardController::class, 'cetak'])->name('kartu-pin'); // G-05
 });

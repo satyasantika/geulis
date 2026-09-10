@@ -3,7 +3,7 @@
 > Salin isi satu sprint dari `SPRINT-BRIEF.md` ke bawah garis ini saat sprint itu dimulai.
 > Tandai `[x]` pada butir yang sudah selesai. Berkas ini dibaca agen koding setiap sesi.
 
-**Sprint aktif:** 0 — Fondasi
+**Sprint aktif:** 1 — Asesmen awal dan Mesin Diferensiasi
 **Mulai:** 2026-09-10
 **Target selesai:** akhir Bulan 6
 
@@ -11,31 +11,27 @@
 
 ## Sasaran
 
-Guru bisa membuat kelas dan mencetak kartu PIN; siswa bisa masuk dan melihat beranda kosong.
+Siswa selesai asesmen awal dan ditempatkan ke jalur belajarnya, dengan alasan penempatan yang tercatat.
 
 ## Butir pekerjaan
 
-- [x] Laravel terpasang di container, tersambung MySQL, `php artisan migrate` jalan
-- [x] Enam berkas migrasi disalin dari kerangka; `migrate:fresh` bersih
-- [ ] Model Eloquent seluruh tabel — tipis (dibuat saat tabelnya dipakai; sesi ini: `Role` dilengkapi)
-- [x] Autentikasi NIS + PIN 6 digit
-- [x] Peran dan middleware `role:`
-- [ ] CRUD sekolah, kelas, pendaftaran siswa; impor CSV
-- [ ] Layar G-05 cetak kartu PIN
-- [ ] Layar S-02 persetujuan penelitian
-- [x] Tata letak dasar Tailwind, mobile-first (`components.layouts.app`; pemeriksaan visual di HP masih terbuka)
+- [x] `DifferentiationEngine`, `DifferentiationConfig`, `AdaptationDecision` tersalin; 16 uji hijau
+- [ ] Tes Kesiapan Prasyarat: 15 butir, empat prasyarat, penskoran otomatis 0–100
+- [ ] Angket Profil Belajar: 20 pernyataan, tiga modus, skor kecenderungan
+- [ ] Angket Minat Konteks Budaya: 6 pernyataan
+- [ ] `PlacementService`: memanggil `tempatkan()`, menyimpan hasil + `penjelasan` ke `placements`
+- [ ] `AdaptationRecorder`: menyimpan hasil `evaluasi()` ke `mastery_states` dan `adaptation_logs`
+- [ ] Layar S-03 asesmen awal dengan penyimpanan sementara
+- [ ] Layar A-03 pengaturan parameter adaptasi + peringatan kunci
 
 ## Selesai bila
 
-- [x] `migrate:fresh --seed` jalan dari nol tanpa galat
-- [ ] Guru bisa membuat kelas, impor 30 siswa dari CSV, cetak kartu PIN
-- [x] Siswa bisa masuk memakai NIS + PIN pada layar selebar 360 px
-- [x] Uji fitur untuk masuk, gagal masuk, dan otorisasi peran
+- [x] 16 kasus uji `DifferentiationEngineTest` hijau
+- [ ] Dua siswa dengan skor kesiapan berbeda menghasilkan `level_awal` berbeda, alasannya terbaca di `placements.penjelasan`
+- [ ] Setiap keputusan menulis satu baris ke `adaptation_logs`
+- [ ] Uji fitur membuktikan `adaptation_logs` bertambah, tidak pernah diperbarui
 
 ## Catatan berjalan
 
-- 2026-09-10 — Kerangka dan bahan vibecoding terpasang; 33 uji hijau (16 Mesin Diferensiasi + 11 penghitung riset + Filament). Rincian di `docs/JURNAL-SESI.md`.
-- Model yang sudah ada: `User`, `School`, `Role`, `Classroom`, `Meeting`, `LessonUnit`, `ContentVariant`, `MasteryState`, `AdaptationLog`. Butir 3 (model seluruh tabel) masih menyisakan ±30 tabel.
-- Filament 5 dipakai untuk panel admin A-xx. `User::canAccessPanel()` sudah dibatasi ke admin/peneliti yang aktif (2026-09-10).
-- 2026-09-10 — Autentikasi, enam peran, middleware `role:`, tata letak dasar selesai; 58 uji hijau. Siswa/guru masuk lewat `/masuk` (S-01), pengelola lewat `/admin/login`.
+- 2026-09-10 — Sprint 0 selesai (commit `feat(guru): kelas, impor csv siswa, kartu pin, dan persetujuan penelitian`). Guru: `/guru`; siswa: `/masuk` → `/belajar/persetujuan` → `/belajar`.
 - Akun seed: username `admin`, surel `admin@geulis.test`, kata sandi `password` (ganti sebelum dipakai di sekolah).

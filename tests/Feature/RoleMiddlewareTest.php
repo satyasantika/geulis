@@ -49,6 +49,6 @@ it('protects the student and teacher areas', function (): void {
     $guru = User::factory()->guru()->create();
 
     actingAs($siswa)->get('/guru')->assertForbidden();
-    actingAs($guru)->get('/belajar')->assertForbidden();
+    actingAs($guru)->get('/belajar/persetujuan')->assertForbidden();
     actingAs($guru)->get('/guru')->assertOk();
 });

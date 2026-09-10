@@ -12,6 +12,8 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -25,8 +27,8 @@ use Illuminate\Notifications\Notifiable;
  * `kode_anonim` (S-001, …) dipakai pada SEMUA ekspor data; nama dan NIS
  * tidak pernah keluar dari sistem.
  */
-#[Fillable(['nama', 'username', 'email', 'password', 'school_id', 'jenis_kelamin', 'kode_anonim', 'aktif', 'terakhir_masuk_pada'])]
-#[Hidden(['password', 'remember_token'])]
+#[Fillable(['nama', 'username', 'email', 'password', 'pin_kartu', 'school_id', 'jenis_kelamin', 'kode_anonim', 'aktif', 'terakhir_masuk_pada'])]
+#[Hidden(['password', 'pin_kartu', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser, HasName
 {
     /** @use HasFactory<UserFactory> */
@@ -100,6 +102,52 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->belongsToMany(Role::class);
     }
 
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(Enrollment::class);
+    }
+
+    public function classrooms(): BelongsToMany
+    {
+        return $this->belongsToMany(Classroom::class, 'enrollments')
+            ->withPivot(['level_kini', 'modus_kini', 'status'])
+            ->withTimestamps();
+    }
+
+    /** Kelas yang diampu (untuk guru). */
+    public function kelasDiampu(): HasMany
+    {
+        return $this->hasMany(Classroom::class, 'guru_id');
+    }
+
+    public function consent(): HasOne
+    {
+        return $this->hasOne(Consent::class);
+    }
+
+    /** Kelas aktif pertama tempat siswa terdaftar. */
+    public function kelasAktif(): ?Classroom
+    {
+        return $this->classrooms()->wherePivot('status', 'aktif')->first();
+    }
+
+    /**
+     * Kode anonim berikutnya, berurutan global (S-001, S-002, …). Global,
+     * bukan per sekolah, supaya tidak pernah bentrok saat data tiga sekolah
+     * digabung; sekolah dan kelas tetap menjadi kolom sendiri saat ekspor.
+     */
+    public static function kodeAnonimBerikutnya(string $awalan = 'S'): string
+    {
+        $terakhir = static::query()
+            ->where('kode_anonim', 'like', $awalan.'-%')
+            ->orderByDesc('kode_anonim')
+            ->value('kode_anonim');
+
+        $nomor = $terakhir === null ? 1 : ((int) substr($terakhir, strlen($awalan) + 1)) + 1;
+
+        return sprintf('%s-%03d', $awalan, $nomor);
+    }
+
     /**
      * @return array<string, string>
      */
@@ -107,6 +155,7 @@ class User extends Authenticatable implements FilamentUser, HasName
     {
         return [
             'password' => 'hashed',
+            'pin_kartu' => 'encrypted',
             'aktif' => 'boolean',
             'terakhir_masuk_pada' => 'datetime',
         ];
