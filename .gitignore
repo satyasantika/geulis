@@ -33,6 +33,9 @@ Thumbs.db
 CLAUDE.local.md
 
 # ── GEULIS ─────────────────────────────────────────────
+# Catatan kerja, cetak biru, dan panduan peran: lokal, bukan bagian repo.
+/docs/
+
 # Unggahan siswa dan aset besar tidak masuk repo.
 /storage/app/produk-siswa/*
 /storage/app/aset-budaya/*
