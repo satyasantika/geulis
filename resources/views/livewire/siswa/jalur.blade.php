@@ -25,6 +25,13 @@
         <p class="mt-3 text-xs text-tinta-3">Titik mulai bisa berubah seiring kemajuanmu — ini posisi sementara, bukan label.</p>
         <a href="{{ route('siswa.kemajuan') }}" wire:navigate class="mt-3 block rounded-xl border border-garis bg-white p-3 text-center text-sm font-semibold">Kemajuanku →</a>
 
+        @if ($angketAktif)
+            <a href="{{ route('siswa.angket') }}" wire:navigate class="mt-4 block rounded-xl border-2 border-aksen bg-aksen-latar p-4">
+                <div class="text-xs text-aksen">Lima pertemuan selesai 🎉</div>
+                <div class="font-semibold">Isi angket respons (±3 menit)</div>
+            </a>
+        @endif
+
         @foreach ($tesAktif as $t)
             <div class="mt-4 rounded-xl border-2 border-aksen bg-aksen-latar p-4" wire:key="tes-{{ $t['tes']->id }}">
                 <div class="text-xs text-aksen">{{ $t['tes']->jenis === 'pretest' ? 'Tes awal' : 'Tes akhir' }} · {{ $t['tes']->durasi_menit }} menit</div>

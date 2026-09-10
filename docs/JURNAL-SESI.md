@@ -32,6 +32,32 @@ Berkas ini punya tiga pembaca, dan ketiganya penting:
 
 ---
 
+## 2026-09-10 · Sprint 5 · modul penelitian — Sprint 5 selesai, seluruh sprint tuntas
+
+**Selesai**
+- Model modul penelitian (validasi, angket, observasi, ekspor) dan `InstrumenPenelitianSeeder`: lembar validasi 4 aspek × 7 = 28 butir skala 1–5, angket siswa 12 & guru 10 butir skala 1–4 dengan butir negatif, lembar observasi 10 butir.
+- V-01 `LembarValidasi` lewat `URL::signedRoute` + token 64 karakter — validator tidak membuat akun; skor & saran tersimpan per butir; status dikirim → dibuka → selesai. V-02 `Peneliti\Validasi`: undang validator (tautan disalin, bukan surel), `RekapAiken` memakai `AikenCalculator` → `aiken_results`, rekap per aspek/keseluruhan, butir "rendah" disorot, unduh saran sebagai daftar tugas revisi (.csv, kolom `status_revisi`). **Diuji terhadap hitungan tangan**: [5,4,5] → 0,917; [4,3,3] → 0,583; [2,2,1] → 0,167.
+- Angket respons siswa (muncul di jalur setelah lima pertemuan selesai) & guru; `PenghitungKepraktisan` (murni, butir negatif dibalik, ambang di `config/angket.php`).
+- O-01 `LembarObservasi`: seluruh isian dipegang Alpine, antrean di localStorage, dikirim sekaligus dan diulang otomatis pada event `online`; server idempoten per (observer, kelas, pertemuan, tanggal).
+- P-01 `KelengkapanData` (per kelas riset: asesmen awal, pretest, P1–P5, posttest, angket, peringatan pretest hilang & persetujuan belum dijawab). P-02 `AnalitikPenelitian` (N-Gain per siswa/kelompok/kelas/indikator + deskriptif; hanya siswa bersedia diteliti). P-03 + `php artisan geulis:ekspor`: .xlsx 12 lembar via openspout (MIT, sudah ada) — **kode anonim, siswa menolak dikeluarkan, ekspor dibatalkan bila `anonimkan_ekspor=false` atau ditemukan nama/NIS di lembar**.
+- Peran lain: peneliti → `/riset/kelengkapan`, observer → `/observasi` setelah masuk.
+- 190 uji hijau; ekspor nyata pada data demo: 12 lembar, 21 KB. Keempat "Selesai bila" Sprint 5 terpenuhi (validator tanpa akun; V = hitungan tangan; ekspor tanpa nama; observer luring — sisi klien via localStorage, sisi server idempoten).
+
+**Tidak selesai**
+- Halaman observasi harus sudah terbuka sebelum masuk mode pesawat (tanpa Service Worker). PWA/cache materi (cetak biru §8.2) masuk `docs/IDE-TAHUN-DEPAN.md`.
+- Angka pada P-02 belum diverifikasi terhadap SPSS pada data sungguhan — dilakukan saat uji coba terbatas.
+
+**Keputusan desain**
+- **Tautan bertanda, bukan akun**: satu hambatan lebih sedikit bagi ahli; token acak + tanda tangan URL Laravel menutup penebakan.
+- **Ekspor memeriksa dirinya sendiri**: sebelum menulis, seluruh sel dicocokkan dengan daftar nama & NIS siswa; bila ada, ekspor gagal. Aturan #4 ditegakkan di kode, bukan hanya di kebijakan.
+- **Uji-t tetap di SPSS/JASP** — P-02 hanya N-Gain + deskriptif, dan halaman menuliskannya secara eksplisit.
+- Undangan validator tidak mengirim surel: kampus/sekolah sering memblokir SMTP; tautan disalin ke WhatsApp lebih andal.
+
+**Sesi berikutnya**
+- *Feature freeze* awal Bulan 9: hanya perbaikan kesalahan yang menghalangi pemakaian. Hal yang wajib sebelum uji coba: ganti sandi `admin`, isi konten P2–P5 lewat A-01, foto artefak sungguhan menggantikan SVG contoh, uji di HP fisik (360 px), uji beban 100 pengguna, cadangan harian.
+
+**Commit:** `feat(riset): validasi ahli aiken, angket, observasi luring, analitik, dan ekspor anonim`
+
 ## 2026-09-10 · Sprint 4 · tes CT, rubrik, papan kelas — Sprint 4 selesai
 
 **Selesai**

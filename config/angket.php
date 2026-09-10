@@ -59,6 +59,10 @@ return [
         'campuran' => 'Campuran',
     ],
 
+    // Kategori kepraktisan dari rerata skor angket (skala 1–4); pasangan [ambang, label]
+    // diperiksa dari yang tertinggi — bukan array berkunci float (lihat AikenCalculator).
+    'kepraktisan' => [[3.25, 'sangat praktis'], [2.50, 'praktis'], [1.75, 'kurang praktis'], [0.0, 'tidak praktis']],
+
     'label_level' => [
         'L1' => 'Dasar',
         'L2' => 'Berkembang',

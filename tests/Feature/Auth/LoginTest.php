@@ -118,7 +118,8 @@ describe('beranda', function (): void {
     })->with([
         'siswa' => [fn () => User::factory()->siswa(), '/belajar'],
         'guru' => [fn () => User::factory()->guru(), '/guru'],
-        'peneliti' => [fn () => User::factory()->peneliti(), '/admin'],
+        'peneliti' => [fn () => User::factory()->peneliti(), '/riset/kelengkapan'],
+        'admin' => [fn () => User::factory()->admin(), '/admin'],
     ]);
 
     it('lets a student see their empty learning path at 360 px', function (): void {

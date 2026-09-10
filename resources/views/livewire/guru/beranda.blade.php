@@ -5,6 +5,9 @@
     <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
         <a href="{{ route('guru.penilaian-uraian') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Penilaian uraian</a>
         <a href="{{ route('guru.pendampingan') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Perlu pendampingan</a>
+        @if (\App\Models\Questionnaire::query()->where('sasaran', 'guru')->where('aktif', true)->exists())
+            <a href="{{ route('guru.angket') }}" wire:navigate class="col-span-2 rounded-xl border-2 border-aksen bg-aksen-latar p-3 text-center font-semibold text-aksen">Isi angket respons guru</a>
+        @endif
         @foreach (\App\Models\Meeting::query()->where('terbit', true)->orderBy('urutan')->get() as $mtg)
             <a href="{{ route('guru.penilaian', $mtg) }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Nilai produk P{{ $mtg->urutan }}</a>
         @endforeach

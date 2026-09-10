@@ -9,6 +9,7 @@ use Filament\Models\Contracts\HasName;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -82,7 +83,9 @@ class User extends Authenticatable implements FilamentUser, HasName
         return match (true) {
             $this->punyaPeran(Peran::Siswa) => route('siswa.jalur'),
             $this->punyaPeran(Peran::Guru) => route('guru.beranda'),
-            $this->punyaPeran(...Peran::pengelolaPanel()) => url('/admin'),
+            $this->punyaPeran(Peran::Admin) => url('/admin'),
+            $this->punyaPeran(Peran::Peneliti) => route('riset.kelengkapan'),
+            $this->punyaPeran(Peran::Observer) => route('observasi.form'),
             default => route('beranda'),
         };
     }
@@ -183,6 +186,22 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function overridesDiterima(): HasMany
     {
         return $this->hasMany(TeacherOverride::class, 'siswa_id');
+    }
+
+    public function questionnaireResponses(): HasMany
+    {
+        return $this->hasMany(QuestionnaireResponse::class);
+    }
+
+    public function expertValidations(): HasMany
+    {
+        return $this->hasMany(ExpertValidation::class, 'validator_id');
+    }
+
+    /** Siswa yang datanya boleh dipakai penelitian (S-02 dijawab "ya"). */
+    public function scopeBersediaDiteliti(Builder $q): Builder
+    {
+        return $q->whereHas('consent', fn ($c) => $c->where('setuju_data_penelitian', true));
     }
 
     /** Enrollment aktif — posisi adaptif siswa saat ini. */
