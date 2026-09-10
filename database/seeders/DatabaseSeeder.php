@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enums\Peran;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -13,8 +14,10 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
+        $this->call(RoleSeeder::class);
+
         // Akun admin awal untuk panel /admin. Ganti kata sandinya sebelum dipakai di sekolah.
-        User::query()->firstOrCreate(
+        $admin = User::query()->firstOrCreate(
             ['username' => 'admin'],
             [
                 'nama' => 'Admin GEULIS',
@@ -22,6 +25,9 @@ class DatabaseSeeder extends Seeder
                 'password' => Hash::make('password'),
             ],
         );
+
+        // Satu akun boleh memegang lebih dari satu peran (cetak biru §2.3).
+        $admin->berikanPeran(Peran::Admin, Peran::Peneliti);
 
         // Kerangka 5 pertemuan x 7 unit; isi kontennya lewat panel admin, bukan seeder.
         $this->call(MeetingSeeder::class);

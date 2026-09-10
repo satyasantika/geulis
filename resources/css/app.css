@@ -3,7 +3,23 @@
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 
+/*
+ * Palet mengikuti wireframe (docs/spesifikasi/wireframe-lms-geulis.html):
+ * cokelat tanah Priangan sebagai aksen, latar hangat, tinta abu kecokelatan.
+ */
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-aksen: #7c2d12;
+    --color-aksen-2: #c2410c;
+    --color-aksen-latar: #fff7ed;
+    --color-latar: #faf9f7;
+    --color-tinta: #1c1917;
+    --color-tinta-2: #57534e;
+    --color-tinta-3: #a8a29e;
+    --color-garis: #d6d3d1;
+    --color-garis-2: #e7e5e4;
+    --color-ok: #15803d;
+    --color-peringatan: #b45309;
 }

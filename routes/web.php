@@ -1,9 +1,37 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
+/*
+|--------------------------------------------------------------------------
+| Rute GEULIS
+|--------------------------------------------------------------------------
+| Nama rute mengikuti kode layar cetak biru (S-xx, G-xx, …); peta lengkapnya
+| di docs/spesifikasi/peta-rute-web.php. Rute ditambahkan saat layarnya dibuat.
+*/
+
+// ---------- Publik ----------
+Route::get('/', fn () => auth()->check()
+    ? redirect(auth()->user()->rutePulang())
+    : redirect()->route('masuk'))->name('beranda');
+
+Route::middleware('guest')->group(function (): void {
+    Route::get('/masuk', [LoginController::class, 'form'])->name('masuk');            // S-01
+    Route::post('/masuk', [LoginController::class, 'proses'])->name('masuk.proses');
 });
 
-Route::get('login', fn () => redirect()->route('filament.admin.auth.login'))->name('login');
+Route::post('/keluar', [LoginController::class, 'keluar'])->middleware('auth')->name('keluar');
+
+// Nama rute `login` masih dicari beberapa paket; arahkan ke S-01.
+Route::redirect('/login', '/masuk')->name('login');
+
+// ---------- Siswa ----------
+Route::middleware(['auth', 'role:siswa'])->prefix('belajar')->name('siswa.')->group(function (): void {
+    Route::view('/', 'siswa.jalur')->name('jalur');                                  // S-04 (kerangka)
+});
+
+// ---------- Guru ----------
+Route::middleware(['auth', 'role:guru'])->prefix('guru')->name('guru.')->group(function (): void {
+    Route::view('/', 'guru.beranda')->name('beranda');                               // G-00 (kerangka)
+});

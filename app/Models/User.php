@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Peran;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Models\Contracts\HasName;
@@ -32,12 +33,56 @@ class User extends Authenticatable implements FilamentUser, HasName
     use HasFactory, Notifiable;
 
     /**
-     * Sementara terbuka untuk semua pengguna. Pembatasan per peran (hanya
-     * admin/peneliti) dikerjakan pada Sprint 0 butir 5 bersama middleware `role:`.
+     * Panel /admin hanya untuk pengelola (admin, peneliti). Guru dan siswa
+     * tidak pernah melihat Filament — layar mereka dibangun terpisah agar
+     * mobile-first dan nadanya sepenuhnya di tangan kita.
      */
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        return $this->aktif && $this->punyaPeran(...Peran::pengelolaPanel());
+    }
+
+    /**
+     * Benar bila pengguna memegang SALAH SATU peran yang disebut.
+     * Relasi `roles` dimuat sekali lalu dipakai ulang supaya pemeriksaan
+     * middleware pada tiap permintaan tidak menambah kueri.
+     */
+    public function punyaPeran(Peran|string ...$peran): bool
+    {
+        $dicari = array_map(
+            fn (Peran|string $p): string => $p instanceof Peran ? $p->value : $p,
+            $peran,
+        );
+
+        return $this->roles->pluck('nama')->intersect($dicari)->isNotEmpty();
+    }
+
+    /**
+     * Tambahkan peran tanpa menggandakan yang sudah ada.
+     */
+    public function berikanPeran(Peran ...$peran): static
+    {
+        $ids = array_map(fn (Peran $p): int => Role::untuk($p)->getKey(), $peran);
+
+        $this->roles()->syncWithoutDetaching($ids);
+        $this->unsetRelation('roles');
+
+        return $this;
+    }
+
+    /**
+     * Tujuan setelah masuk, ditentukan dari peran. Siswa ke jalur belajar,
+     * guru ke berandanya, pengelola ke panel; peran lain (validator, observer)
+     * masuk lewat tautan bertanda sehingga jatuh ke beranda umum.
+     */
+    public function rutePulang(): string
+    {
+        return match (true) {
+            $this->punyaPeran(Peran::Siswa) => route('siswa.jalur'),
+            $this->punyaPeran(Peran::Guru) => route('guru.beranda'),
+            $this->punyaPeran(...Peran::pengelolaPanel()) => url('/admin'),
+            default => route('beranda'),
+        };
     }
 
     public function getFilamentName(): string

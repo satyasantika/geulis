@@ -32,6 +32,35 @@ Berkas ini punya tiga pembaca, dan ketiganya penting:
 
 ---
 
+## 2026-09-10 · Sprint 0 · autentikasi NIS + PIN, enam peran, middleware `role:`
+
+**Selesai**
+- Enum `App\Enums\Peran` (enam peran §2.3) menjadi satu sumber kebenaran untuk `roles.nama`, seeder, factory, dan alias rute `role:`. `RoleSeeder` idempoten dipanggil `DatabaseSeeder`; akun `admin` seed memegang peran admin + peneliti.
+- `User::punyaPeran()`, `User::berikanPeran()`, `User::rutePulang()`; `canAccessPanel()` kini hanya admin/peneliti yang aktif. Filament `UserForm` mendapat pilihan peran (wajib) dan sakelar aktif; tabel pengguna menampilkan lencana peran.
+- Middleware `EnsureUserHasRole` dengan alias `role:` (mendukung `role:admin,peneliti`). Tamu diarahkan ke `/masuk`, bukan ke login Filament.
+- S-01 Masuk: `LoginController` tipis + `MasukRequest` (validasi, pembatasan laju 5×/menit per username+IP, tolak akun nonaktif, catat `terakhir_masuk_pada`). Rute `/masuk`, `/keluar`, `/login` → `/masuk`; beranda `/` mengarahkan sesuai peran.
+- Tata letak dasar `components.layouts.app` (satu kolom, `max-w-md`, `px-4`), tema warna dari wireframe di `app.css`, kerangka `siswa.jalur` dan `guru.beranda`.
+- Uji: 58 hijau (25 baru: `Auth/LoginTest`, `RoleMiddlewareTest`, `FilamentAuthTest` diperbarui). Pint bersih. `migrate:fresh --seed` bersih di MariaDB. Vite terbangun.
+
+**Tidak selesai**
+- Butir 6–8 Sprint 0 (CRUD sekolah/kelas, impor CSV, G-05 kartu PIN, S-02 persetujuan) — belum dimulai; menunggu alur masuk selesai.
+- Pemeriksaan visual 360 px baru lewat struktur (satu kolom, meta viewport, diuji) — belum dibuka di peramban HP sungguhan.
+- "Gabung kelas dengan kode" pada wireframe S-01 belum ada tombolnya karena `classrooms` belum punya CRUD; ditambahkan bersama butir 6.
+
+**Keputusan desain**
+- Masuk memakai **controller + FormRequest biasa, bukan Livewire**, karena S-01 harus tetap bekerja tanpa JavaScript pada HP kelas bawah dan sinyal sekolah yang buruk; Livewire dipakai untuk layar interaktif setelah masuk.
+- Satu kolom `password` menampung PIN siswa maupun sandi guru/admin; pembeda peran ada di tabel `roles`, bukan di jenis kredensial. Formulir masuk tunggal (NIS/NIP + PIN) untuk semua peran, sehingga hanya satu alur yang perlu divalidasi ahli.
+- Pesan gagal masuk **tidak membedakan** "NIS tidak ada" dan "PIN salah" — mencegah pengintaian NIS teman sekelas.
+- Pembatasan laju masuk **tidak** dimasukkan ke `config/geulis.php`, karena itu parameter keamanan, bukan parameter penelitian yang divalidasi ahli; nilainya konstanta di `MasukRequest`.
+- Filament tetap memakai login surel+sandi sendiri di `/admin/login` (pengelola punya surel), sedangkan siswa/guru lewat S-01. `rutePulang()` pengelola mengarah ke `/admin`.
+- `welcome.blade.php` bawaan dihapus; `/` bukan halaman pemasaran, hanya pengarah ke layar peran.
+
+**Sesi berikutnya**
+- Butir 6: model `Consent`, CRUD sekolah & kelas (Filament A-02), pendaftaran siswa + impor CSV dengan pembangkit PIN dan `kode_anonim`.
+- Butir 7–8: G-05 kartu PIN (cetak & atur ulang PIN), S-02 persetujuan penelitian.
+
+**Commit:** lihat `git log --oneline -1` — `feat(auth): alur masuk nis + pin, enam peran, dan middleware role`
+
 ## 2026-09-10 · Sprint 0 · pasang kerangka GEULIS dan bahan vibecoding
 
 **Selesai**

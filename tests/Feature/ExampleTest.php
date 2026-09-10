@@ -2,18 +2,18 @@
 
 namespace Tests\Feature;
 
-// use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class ExampleTest extends TestCase
 {
-    /**
-     * A basic test example.
-     */
-    public function test_the_application_returns_a_successful_response(): void
-    {
-        $response = $this->get('/');
+    use RefreshDatabase;
 
-        $response->assertStatus(200);
+    /**
+     * Beranda mengarahkan tamu ke S-01; rincian per peran diuji di Auth/LoginTest.
+     */
+    public function test_the_application_responds_on_the_root_path(): void
+    {
+        $this->get('/')->assertRedirect('/masuk');
     }
 }

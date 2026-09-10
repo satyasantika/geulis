@@ -23,6 +23,9 @@ class UsersTable
                     ->label('Username')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('roles.label')
+                    ->label('Peran')
+                    ->badge(),
                 TextColumn::make('email')
                     ->label('Email')
                     ->searchable()
