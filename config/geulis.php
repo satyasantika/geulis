@@ -16,6 +16,9 @@ return [
     'ambang_remedial' => env('GEULIS_AMBANG_REMEDIAL', 0.50),
     'maks_iterasi_remedial' => env('GEULIS_MAKS_REMEDIAL', 2),
 
+    // true begitu validasi ahli dimulai; A-03 menampilkan peringatan kunci.
+    'parameter_terkunci' => env('GEULIS_PARAMETER_TERKUNCI', false),
+
     // --- Motif Builder
     'motif_resolusi' => 200,   // kisi raster untuk penskoran IoU
     'motif_ambang_lolos' => 90.0,  // persen kemiripan

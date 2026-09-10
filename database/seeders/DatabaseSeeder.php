@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
 
     public function run(): void
     {
-        $this->call(RoleSeeder::class);
+        $this->call([RoleSeeder::class, ReadinessItemSeeder::class]);
 
         // Akun admin awal untuk panel /admin. Ganti kata sandinya sebelum dipakai di sekolah.
         $admin = User::query()->firstOrCreate(

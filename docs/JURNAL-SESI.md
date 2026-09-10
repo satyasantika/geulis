@@ -32,6 +32,32 @@ Berkas ini punya tiga pembaca, dan ketiganya penting:
 
 ---
 
+## 2026-09-10 · Sprint 1 · asesmen awal, penempatan, dan perekam adaptasi — Sprint 1 selesai
+
+**Selesai**
+- Model `ReadinessItem`, `ReadinessResponse`, `LearningProfile`, `Placement`; `ReadinessItemSeeder` 15 butir (koordinat 4, bangun datar 4, simetri 4, bilangan bulat 3); butir angket profil (20) dan minat (6) di `config/angket.php`.
+- `PenskorKesiapan`, `PenskorAngket` (murni). `PlacementService` memanggil `tempatkan()` dan menyimpan `placements.penjelasan` (aturan, parameter, rincian per prasyarat, skor minat), profil, dan `enrollments.level_kini/modus_kini`.
+- `AdaptationRecorder`: M awal = R/100, memanggil `evaluasi()`, memperbarui `mastery_states`, **hanya `create()`** ke `adaptation_logs`, memperbarui `level_kini`. Model `AdaptationLog` melempar `LogicException` pada `updating`/`deleting` — aturan #2 ditegakkan di lapisan model dan diuji.
+- `DifferentiationEngine` terdaftar singleton dengan parameter `config/geulis.php`.
+- S-03 Livewire tiga tahap dengan penyimpanan per jawaban (kesiapan → `readiness_responses`, angket → draf `learning_profiles.jawaban_mentah`); melanjutkan dari butir terakhir. S-04 menampilkan titik mulai, cara belajar, artefak.
+- A-03 Filament: parameter ditampilkan **baca-saja** dengan peringatan kunci; `GEULIS_PARAMETER_TERKUNCI` ditambahkan ke `config/geulis.php` dan `.env.example`.
+- 106 uji hijau; semua butir "Selesai bila" Sprint 1 terpenuhi.
+
+**Tidak selesai**
+- Pretest CT belum ada di alur (Sprint 4); penempatan dijalankan langsung setelah angket minat karena penempatan hanya butuh R, P, B.
+
+**Keputusan desain**
+- **A-03 tidak menyunting**, hanya menampilkan. Parameter hidup di `config/geulis.php` + `.env` sehingga setiap perubahan lewat Git/jurnal, bukan klik di peramban — jejak revisi yang bisa diperiksa validator. Kunci = variabel lingkungan, bukan tombol.
+- **Skor profil 0–100 per modus** dari Likert 1–4: (jumlah − n)/(3n) × 100. Penentuan modus utama/campuran tetap di mesin, bukan di penskor angket, supaya satu aturan satu tempat.
+- **Butir angket di berkas konfigurasi**, bukan tabel, karena tetap selama penelitian dan divalidasi ahli bersama instrumen; butir tes kesiapan di seeder (punya tabel) dengan alasan sama.
+- **Jawaban asesmen disimpan per butir**, bukan per halaman: syarat "putus koneksi tidak mengulang dari awal".
+- Durasi per butir kesiapan dihitung di server (waktu tampil vs waktu jawab) — cukup untuk sinyal, tanpa JavaScript tambahan.
+
+**Sesi berikutnya**
+- Sprint 2: A-01 varian konten, `VariantResolver`, S-05, GeoGebra swadaya, aset budaya + atribusi wajib, pengunci pertemuan.
+
+**Commit:** `feat(mesin): asesmen awal, penempatan, dan perekam adaptasi`
+
 ## 2026-09-10 · Sprint 0 · kelas, impor CSV, kartu PIN, persetujuan — Sprint 0 selesai
 
 **Selesai**

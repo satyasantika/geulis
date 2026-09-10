@@ -14,6 +14,16 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class AdaptationLog extends Model
 {
+    /**
+     * Aturan #2 CLAUDE.md ditegakkan di sini, bukan hanya di kebiasaan:
+     * baris jejak adaptasi tidak pernah diperbarui atau dihapus.
+     */
+    protected static function booted(): void
+    {
+        static::updating(fn () => throw new \LogicException('adaptation_logs hanya boleh ditambah, tidak pernah diperbarui.'));
+        static::deleting(fn () => throw new \LogicException('adaptation_logs hanya boleh ditambah, tidak pernah dihapus.'));
+    }
+
     protected $fillable = [
         'user_id', 'lesson_unit_id', 'kode_aturan', 'm_sebelum', 'm_sesudah',
         'skor_pemeriksaan', 'level_sebelum', 'level_sesudah', 'keputusan', 'konteks',

@@ -5,6 +5,7 @@ use App\Http\Controllers\Guru\PinCardController;
 use App\Http\Controllers\Siswa\ConsentController;
 use App\Livewire\Guru\Beranda as GuruBeranda;
 use App\Livewire\Guru\DetailKelas;
+use App\Livewire\Siswa\AsesmenAwal;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -37,6 +38,7 @@ Route::middleware(['auth', 'role:siswa'])->prefix('belajar')->name('siswa.')->gr
 
     Route::middleware('persetujuan')->group(function (): void {
         Route::view('/', 'siswa.jalur')->name('jalur');                                          // S-04 (kerangka)
+        Route::get('/asesmen-awal', AsesmenAwal::class)->name('asesmen');                          // S-03
     });
 });
 

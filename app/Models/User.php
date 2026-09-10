@@ -125,6 +125,31 @@ class User extends Authenticatable implements FilamentUser, HasName
         return $this->hasOne(Consent::class);
     }
 
+    public function learningProfile(): HasOne
+    {
+        return $this->hasOne(LearningProfile::class);
+    }
+
+    public function placement(): HasOne
+    {
+        return $this->hasOne(Placement::class);
+    }
+
+    public function readinessResponses(): HasMany
+    {
+        return $this->hasMany(ReadinessResponse::class);
+    }
+
+    public function masteryStates(): HasMany
+    {
+        return $this->hasMany(MasteryState::class);
+    }
+
+    public function adaptationLogs(): HasMany
+    {
+        return $this->hasMany(AdaptationLog::class);
+    }
+
     /** Kelas aktif pertama tempat siswa terdaftar. */
     public function kelasAktif(): ?Classroom
     {
