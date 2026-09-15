@@ -3,17 +3,18 @@
 namespace App\Livewire\Angket;
 
 use App\Models\Questionnaire;
+use App\Models\QuestionnaireReflection;
 use App\Models\QuestionnaireResponse;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
 use Livewire\Component;
 
 /**
- * Angket respons (kepraktisan) untuk siswa dan guru. Muncul otomatis setelah
- * pertemuan terakhir (siswa) atau kapan pun angket diaktifkan (guru).
- * Jawaban disimpan per butir.
+ * Angket persepsi (30 butir, 9 aspek, skala 1-5) untuk siswa. Berbeda dari
+ * AngketRespons (kepraktisan) -- instrumen terpisah, tidak terikat status
+ * pertemuan, diaktifkan manual oleh peneliti lewat kolom `aktif`.
  */
-class AngketRespons extends Component
+class AngketPersepsi extends Component
 {
     #[Locked]
     public int $angketId;
@@ -21,17 +22,24 @@ class AngketRespons extends Component
     /** @var array<int, int|null> */
     public array $jawaban = [];
 
+    /** @var array<string, string> */
+    public array $catatan = ['disukai' => '', 'diperbaiki' => '', 'saran' => ''];
+
     public bool $selesai = false;
 
-    public function mount(string $sasaran): void
+    public function mount(): void
     {
-        $angket = Questionnaire::query()->where('sasaran', $sasaran)->where('jenis', 'kepraktisan')->where('aktif', true)->firstOrFail();
-        abort_unless(auth()->user()->punyaPeran($sasaran), 403);
+        abort_unless(auth()->user()->punyaPeran('siswa'), 403);
+
+        $angket = Questionnaire::query()->where('sasaran', 'siswa')->where('jenis', 'persepsi')->where('aktif', true)->firstOrFail();
 
         $this->angketId = $angket->getKey();
         $this->jawaban = auth()->user()->questionnaireResponses()
             ->whereIn('questionnaire_item_id', $angket->items()->pluck('id'))
             ->pluck('skor', 'questionnaire_item_id')->all();
+        $this->catatan = QuestionnaireReflection::query()
+            ->where('user_id', auth()->id())->where('questionnaire_id', $angket->id)
+            ->pluck('jawaban', 'kode')->union(collect($this->catatan))->all();
         $this->selesai = count($this->jawaban) >= $angket->items()->count();
     }
 
@@ -63,6 +71,17 @@ class AngketRespons extends Component
             return;
         }
 
+        foreach ($this->catatan as $kode => $jawaban) {
+            if (trim((string) $jawaban) === '') {
+                continue;
+            }
+
+            QuestionnaireReflection::query()->updateOrCreate(
+                ['user_id' => auth()->id(), 'questionnaire_id' => $angket->id, 'kode' => $kode],
+                ['jawaban' => $jawaban],
+            );
+        }
+
         $this->selesai = true;
     }
 
@@ -75,9 +94,10 @@ class AngketRespons extends Component
     {
         $angket = $this->angket();
 
-        return view('livewire.angket.angket-respons', [
+        return view('livewire.angket.angket-persepsi', [
             'angket' => $angket,
-            'skala' => $angket->skala_maks === 4 ? config('angket.skala') : array_combine(range(1, $angket->skala_maks), range(1, $angket->skala_maks)),
+            'skala' => config('angket.skala5'),
+            'catatanLabel' => config('angket.catatan_persepsi'),
             'kembali' => auth()->user()->rutePulang(),
         ])->title($angket->nama);
     }

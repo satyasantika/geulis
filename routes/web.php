@@ -6,6 +6,7 @@ use App\Http\Controllers\Produk\ProductFileController;
 use App\Http\Controllers\Riset\EksporController;
 use App\Http\Controllers\Riset\SaranController;
 use App\Http\Controllers\Siswa\ConsentController;
+use App\Livewire\Angket\AngketPersepsi;
 use App\Livewire\Angket\AngketRespons;
 use App\Livewire\Guru\Beranda as GuruBeranda;
 use App\Livewire\Guru\DetailKelas;
@@ -75,6 +76,7 @@ Route::middleware(['auth', 'role:siswa'])->prefix('belajar')->name('siswa.')->gr
         Route::get('/kemajuan', Kemajuan::class)->name('kemajuan');                                // S-09
         Route::get('/produk/{meeting}', Produk::class)->name('produk');                            // S-10
         Route::get('/angket', AngketRespons::class)->defaults('sasaran', 'siswa')->name('angket');  // angket respons siswa
+        Route::get('/angket-persepsi', AngketPersepsi::class)->name('angket.persepsi');             // angket persepsi siswa
     });
 });
 

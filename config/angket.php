@@ -11,6 +11,16 @@ return [
 
     'skala' => [1 => 'Sangat tidak setuju', 2 => 'Tidak setuju', 3 => 'Setuju', 4 => 'Sangat setuju'],
 
+    // Skala 1-5 untuk Angket Persepsi Peserta Didik (lihat AngketPersepsi).
+    'skala5' => [1 => 'Sangat Tidak Setuju', 2 => 'Tidak Setuju', 3 => 'Ragu-ragu/Cukup Setuju', 4 => 'Setuju', 5 => 'Sangat Setuju'],
+
+    // Tiga pertanyaan terbuka di akhir Angket Persepsi; kunci = QuestionnaireReflection.kode.
+    'catatan_persepsi' => [
+        'disukai' => 'Bagian GEULIS yang paling saya sukai',
+        'diperbaiki' => 'Bagian GEULIS yang menurut saya perlu diperbaiki',
+        'saran' => 'Saran saya agar GEULIS lebih membantu pembelajaran matematika',
+    ],
+
     // Profil belajar: 7 visual, 7 simbolik, 6 naratif. Urutan diselang-seling
     // agar siswa tidak menebak "kelompok" pernyataan.
     'profil' => [

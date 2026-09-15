@@ -32,6 +32,13 @@
             </a>
         @endif
 
+        @if ($angketPersepsiAktif)
+            <a href="{{ route('siswa.angket.persepsi') }}" wire:navigate class="mt-4 block rounded-xl border-2 border-aksen bg-aksen-latar p-4">
+                <div class="text-xs text-aksen">Minta pendapatmu</div>
+                <div class="font-semibold">Isi angket persepsi (±8 menit)</div>
+            </a>
+        @endif
+
         @foreach ($tesAktif as $t)
             <div class="mt-4 rounded-xl border-2 border-aksen bg-aksen-latar p-4" wire:key="tes-{{ $t['tes']->id }}">
                 <div class="text-xs text-aksen">{{ $t['tes']->jenis === 'pretest' ? 'Tes awal' : 'Tes akhir' }} · {{ $t['tes']->durasi_menit }} menit</div>

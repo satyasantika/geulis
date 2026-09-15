@@ -6,8 +6,8 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-/** Angket respons (kepraktisan) untuk siswa atau guru. */
-#[Fillable(['nama', 'sasaran', 'skala_maks', 'aktif'])]
+/** Angket respons untuk siswa atau guru; `jenis` membedakan kepraktisan dari persepsi. */
+#[Fillable(['nama', 'sasaran', 'jenis', 'skala_maks', 'aktif'])]
 class Questionnaire extends Model
 {
     public function items(): HasMany

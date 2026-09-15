@@ -19,7 +19,7 @@ class Analitik extends Component
         $baris = $analitik->perSiswa();
 
         $angket = [];
-        foreach (Questionnaire::query()->with('items.responses')->get() as $q) {
+        foreach (Questionnaire::query()->where('jenis', 'kepraktisan')->with('items.responses')->get() as $q) {
             $angket[$q->sasaran] = (new PenghitungKepraktisan($q->skala_maks, config('angket.kepraktisan')))->rekap(
                 $q->items->map(fn ($i) => ['aspek' => $i->aspek, 'butir_negatif' => $i->butir_negatif, 'skor' => $i->responses->pluck('skor')->all()])->all()
             );

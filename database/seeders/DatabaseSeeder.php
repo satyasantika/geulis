@@ -31,6 +31,6 @@ class DatabaseSeeder extends Seeder
 
         // Kerangka 5 pertemuan x 7 unit; isi kontennya lewat panel admin, bukan seeder.
         // Motif sasaran Motif Builder ikut kerangka: strukturnya bagian dari mesin penilaian.
-        $this->call([MeetingSeeder::class, MotifSasaranSeeder::class, CtTestSeeder::class, RubricSeeder::class, InstrumenPenelitianSeeder::class]);
+        $this->call([MeetingSeeder::class, MotifSasaranSeeder::class, CtTestSeeder::class, RubricSeeder::class, InstrumenPenelitianSeeder::class, InstrumenPersepsiSeeder::class]);
     }
 }

@@ -21,7 +21,9 @@ class Jalur extends Component
         $semuaSelesai = $jalur->isNotEmpty() && $jalur->every(fn ($b) => $b['selesai']);
 
         return view('livewire.siswa.jalur', [
-            'angketAktif' => $semuaSelesai && Questionnaire::query()->where('sasaran', 'siswa')->where('aktif', true)->exists(),
+            'angketAktif' => $semuaSelesai && Questionnaire::query()->where('sasaran', 'siswa')->where('jenis', 'kepraktisan')->where('aktif', true)->exists(),
+            // Angket persepsi tidak terikat status pertemuan -- diaktifkan manual oleh peneliti kapan pun.
+            'angketPersepsiAktif' => Questionnaire::query()->where('sasaran', 'siswa')->where('jenis', 'persepsi')->where('aktif', true)->exists(),
             'siswa' => $siswa,
             'penempatan' => $siswa->placement,
             'jalur' => $jalur,

@@ -8,6 +8,7 @@ use App\Models\MasteryState;
 use App\Models\MotifSubmission;
 use App\Models\Observation;
 use App\Models\Questionnaire;
+use App\Models\QuestionnaireReflection;
 use App\Models\QuestionnaireResponse;
 use App\Models\Reflection;
 use App\Models\User;
@@ -86,7 +87,7 @@ final class PengeksporData
             })->all()];
 
         foreach (['siswa' => 'angket_siswa', 'guru' => 'angket_guru'] as $sasaran => $nama) {
-            $angket = Questionnaire::query()->with('items')->where('sasaran', $sasaran)->first();
+            $angket = Questionnaire::query()->with('items')->where('sasaran', $sasaran)->where('jenis', 'kepraktisan')->first();
             $baris = [];
             if ($angket !== null) {
                 $respons = QuestionnaireResponse::query()->whereIn('questionnaire_item_id', $angket->items->pluck('id'))
@@ -97,6 +98,21 @@ final class PengeksporData
             }
             $lembar[$nama] = [['kode', ...($angket?->items->map(fn ($i) => 'b'.$i->urutan)->all() ?? [])], ...$baris];
         }
+
+        $angketPersepsi = Questionnaire::query()->with('items')->where('sasaran', 'siswa')->where('jenis', 'persepsi')->first();
+        $barisPersepsi = [];
+        if ($angketPersepsi !== null) {
+            $respons = QuestionnaireResponse::query()->whereIn('questionnaire_item_id', $angketPersepsi->items->pluck('id'))
+                ->whereIn('user_id', $idSiswa)->get()->groupBy('user_id');
+            $catatan = QuestionnaireReflection::query()->where('questionnaire_id', $angketPersepsi->id)
+                ->whereIn('user_id', $idSiswa)->get()->groupBy('user_id');
+            foreach ($respons as $userId => $jawaban) {
+                $c = $catatan->get($userId, collect());
+                $barisPersepsi[] = [$kode[$userId], ...$angketPersepsi->items->map(fn ($i) => $jawaban->firstWhere('questionnaire_item_id', $i->id)?->skor)->all(),
+                    $c->firstWhere('kode', 'disukai')?->jawaban, $c->firstWhere('kode', 'diperbaiki')?->jawaban, $c->firstWhere('kode', 'saran')?->jawaban];
+            }
+        }
+        $lembar['angket_persepsi'] = [['kode', ...($angketPersepsi?->items->map(fn ($i) => 'b'.$i->urutan)->all() ?? []), 'disukai', 'diperbaiki', 'saran'], ...$barisPersepsi];
 
         $lembar['validasi_ahli'] = [['validator', 'aspek', 'butir', 'pernyataan', 'skor', 'saran'],
             ...ExpertValidation::query()->with(['ratings.item'])->where('status', 'selesai')->get()
