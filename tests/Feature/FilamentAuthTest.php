@@ -43,6 +43,19 @@ class FilamentAuthTest extends TestCase
         $this->actingAs($user)->get('/admin')->assertOk();
     }
 
+    public function test_an_admin_returns_to_the_landing_page_after_signing_out_of_the_panel(): void
+    {
+        $admin = User::factory()->admin()->create();
+
+        Filament::setCurrentPanel(Filament::getPanel('admin'));
+
+        $this->actingAs($admin)
+            ->post(Filament::getLogoutUrl())
+            ->assertRedirect(route('beranda'));
+
+        $this->assertGuest();
+    }
+
     public function test_a_researcher_can_open_the_panel(): void
     {
         $peneliti = User::factory()->peneliti()->create();

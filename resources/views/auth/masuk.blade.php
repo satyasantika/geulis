@@ -23,15 +23,14 @@
         </div>
 
         <div>
-            <label for="pin" class="mb-1 block text-sm font-medium text-tinta-2">PIN (6 digit)</label>
+            <label for="pin" class="mb-1 block text-sm font-medium text-tinta-2">PIN atau sandi</label>
             <input
                 id="pin"
                 name="pin"
                 type="password"
-                inputmode="numeric"
                 autocomplete="current-password"
                 required
-                class="block w-full rounded-lg border border-garis bg-white px-3 py-3 text-base tracking-[0.4em] focus:border-aksen focus:outline-none focus:ring-2 focus:ring-aksen/30"
+                class="block w-full rounded-lg border border-garis bg-white px-3 py-3 text-base focus:border-aksen focus:outline-none focus:ring-2 focus:ring-aksen/30"
             >
         </div>
 
@@ -46,5 +45,5 @@
         </button>
     </form>
 
-    <p class="mt-6 text-center text-xs text-tinta-3">Lupa PIN? Minta gurumu mengatur ulang.</p>
+        <p class="mt-6 text-center text-xs text-tinta-3">Lupa sandi? Minta gurumu mengatur ulang.</p>
 </x-layouts.app>

@@ -2,6 +2,15 @@
     <h1 class="text-xl font-bold">Selamat datang, {{ auth()->user()->nama }}</h1>
     <p class="mt-1 text-sm text-tinta-2">Kelas yang Anda ampu.</p>
 
+    @foreach ($pesan as $p)
+        <p class="mt-3 rounded-lg border border-ok/40 bg-green-50 px-3 py-2 text-sm text-ok">{{ $p }}</p>
+    @endforeach
+    @if ($galat !== [])
+        <ul class="mt-3 space-y-1 rounded-lg border border-peringatan/40 bg-aksen-latar px-3 py-2 text-sm text-peringatan">
+            @foreach ($galat as $g) <li>{{ $g }}</li> @endforeach
+        </ul>
+    @endif
+
     <div class="mt-4 grid grid-cols-2 gap-2 text-sm">
         <a href="{{ route('guru.penilaian-uraian') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Penilaian uraian</a>
         <a href="{{ route('guru.pendampingan') }}" wire:navigate class="rounded-xl border border-garis bg-white p-3 text-center">Perlu pendampingan</a>
@@ -60,6 +69,14 @@
                     @endforeach
                 </select>
                 @error('school_id') <p class="mt-1 text-xs text-peringatan">Pilih sekolah.</p> @enderror
+            </div>
+            <div>
+                <label for="daftarSiswa" class="mb-1 block text-sm text-tinta-2">Daftar siswa (opsional)</label>
+                <p class="mb-2 text-xs text-tinta-3">Tempel NIS dan nama, satu baris satu siswa. NIS yang sudah ada tidak dibuat ulang — siswa itu hanya ditambahkan ke kelas ini. Sandi awal: <code>{{ \App\Services\Kelas\PendaftarSiswa::SANDI_AWAL }}</code></p>
+                <textarea id="daftarSiswa" wire:model="daftarSiswa" rows="8"
+                          placeholder="0056781234 Reza Pratama&#10;0056781235 Siti Aminah"
+                          class="block min-h-32 w-full rounded-lg border border-garis px-3 py-3 font-mono text-sm leading-6"></textarea>
+                @error('daftarSiswa') <p class="mt-1 text-xs text-peringatan">{{ $message }}</p> @enderror
             </div>
             <div class="flex gap-2">
                 <button type="submit" class="flex-1 rounded-lg bg-aksen px-4 py-3 font-semibold text-white">Simpan</button>

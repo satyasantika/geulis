@@ -15,7 +15,7 @@ use Illuminate\Support\Str;
  * Kelas (rombongan belajar). `kelompok_riset` melekat di sini, bukan pada
  * siswa — sesuai desain kuasi-eksperimen kelas utuh.
  */
-#[Fillable(['school_id', 'guru_id', 'nama', 'tahun_ajaran', 'kelompok_riset', 'kode_gabung', 'aktif'])]
+#[Fillable(['school_id', 'guru_id', 'nama', 'tahun_ajaran', 'kelompok_riset', 'kode_gabung', 'aktif', 'simulation_run_id'])]
 class Classroom extends Model
 {
     /** @use HasFactory<ClassroomFactory> */
@@ -45,6 +45,11 @@ class Classroom extends Model
     public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function simulationRun(): BelongsTo
+    {
+        return $this->belongsTo(SimulationRun::class);
     }
 
     public function guru(): BelongsTo

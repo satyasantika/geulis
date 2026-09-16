@@ -8,12 +8,16 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 /**
- * Lapisan penyimpanan untuk pendaftaran siswa: membuat akun (NIS + PIN),
- * memberi kode anonim, dan memasukkan ke kelas. Dipakai impor CSV dan
- * formulir tambah satu siswa.
+ * Lapisan penyimpanan untuk pendaftaran siswa: membuat akun (NIS + sandi),
+ * memberi kode anonim, dan memasukkan ke kelas. Dipakai impor copas/CSV
+ * dan formulir tambah satu siswa. NIS yang sudah ada tidak digandakan;
+ * siswa itu hanya ditambahkan ke kelas (boleh lebih dari satu kelas).
  */
 final class PendaftarSiswa
 {
+    /** Sandi awal akun siswa baru — sama untuk seluruh impor massal. */
+    public const string SANDI_AWAL = 'siswa-1234';
+
     public function __construct(
         private readonly PembangkitPin $pembangkitPin = new PembangkitPin,
     ) {}
@@ -57,13 +61,11 @@ final class PendaftarSiswa
      */
     public function buatSiswa(Classroom $kelas, array $data): User
     {
-        $pin = $this->pembangkitPin->baru();
-
         $siswa = User::query()->create([
             'nama' => $data['nama'],
             'username' => $data['nis'],
-            'password' => $pin,
-            'pin_kartu' => $pin,
+            'password' => self::SANDI_AWAL,
+            'pin_kartu' => self::SANDI_AWAL,
             'school_id' => $kelas->school_id,
             'jenis_kelamin' => $data['jenis_kelamin'],
             'kode_anonim' => User::kodeAnonimBerikutnya('S'),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Enums\Peran;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\MasukRequest;
 use Illuminate\Http\RedirectResponse;
@@ -29,11 +30,13 @@ class LoginController extends Controller
 
     public function keluar(Request $request): RedirectResponse
     {
+        $keBeranda = $request->user()?->punyaPeran(Peran::Admin) === true;
+
         auth()->guard('web')->logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('masuk');
+        return redirect()->route($keBeranda ? 'beranda' : 'masuk');
     }
 }

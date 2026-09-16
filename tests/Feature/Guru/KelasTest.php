@@ -6,6 +6,7 @@ use App\Livewire\Guru\DetailKelas;
 use App\Models\Classroom;
 use App\Models\School;
 use App\Models\User;
+use App\Services\Kelas\PendaftarSiswa;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Livewire;
@@ -30,6 +31,28 @@ describe('G-00 beranda guru', function (): void {
 
         expect($kelas->guru_id)->toBe($guru->id)
             ->and($kelas->kode_gabung)->toMatch('/^[A-Z0-9]{6}$/');
+    });
+
+    it('lets a teacher create a class and paste NIS plus names in one step', function (): void {
+        $guru = User::factory()->guru()->create();
+        $sekolah = School::factory()->create();
+
+        Livewire::actingAs($guru)
+            ->test(Beranda::class)
+            ->set('nama', 'XI MIPA 3')
+            ->set('tahun_ajaran', '2026/2027')
+            ->set('school_id', $sekolah->id)
+            ->set('daftarSiswa', "0056781234 Reza Pratama\n0056781235\tSiti Aminah\n")
+            ->call('simpan')
+            ->assertHasNoErrors()
+            ->assertSee('2 siswa baru dibuat');
+
+        $kelas = Classroom::query()->where('nama', 'XI MIPA 3')->firstOrFail();
+        $reza = User::query()->where('username', '0056781234')->firstOrFail();
+
+        expect($kelas->siswa()->count())->toBe(2)
+            ->and($reza->nama)->toBe('Reza Pratama')
+            ->and(Hash::check(PendaftarSiswa::SANDI_AWAL, $reza->password))->toBeTrue();
     });
 
     it('rejects a malformed school year', function (): void {
@@ -63,8 +86,8 @@ describe('impor siswa', function (): void {
 
         expect($pertama->punyaPeran(Peran::Siswa))->toBeTrue()
             ->and($pertama->kode_anonim)->toBe('S-001')
-            ->and($pertama->pin_kartu)->toMatch('/^\d{6}$/')
-            ->and(Hash::check($pertama->pin_kartu, $pertama->password))->toBeTrue()
+            ->and($pertama->pin_kartu)->toBe(PendaftarSiswa::SANDI_AWAL)
+            ->and(Hash::check(PendaftarSiswa::SANDI_AWAL, $pertama->password))->toBeTrue()
             ->and($pertama->school_id)->toBe($kelas->school_id)
             ->and(User::query()->where('username', '0000000030')->value('kode_anonim'))->toBe('S-030');
     });
@@ -82,6 +105,28 @@ describe('impor siswa', function (): void {
         expect(User::query()->where('username', '0056781234')->count())->toBe(1)
             ->and($kelas->siswa()->pluck('users.id'))->toContain($lama->id)
             ->and(User::query()->where('username', '0056781299')->value('kode_anonim'))->toBe('S-008');
+    });
+
+    it('enrolls an existing student in a second class without duplicating the user or resetting the password', function (): void {
+        $kelasA = Classroom::factory()->create();
+        $kelasB = Classroom::factory()->create(['guru_id' => $kelasA->guru_id, 'school_id' => $kelasA->school_id]);
+        $lama = User::factory()->siswa()->pin('482913')->create(['username' => '0056781234', 'kode_anonim' => 'S-007', 'pin_kartu' => '482913']);
+        $kelasA->enrollments()->create(['user_id' => $lama->id]);
+
+        Livewire::actingAs($kelasA->guru)
+            ->test(DetailKelas::class, ['classroom' => $kelasB])
+            ->set('teksSiswa', "0056781234 Reza Pratama\n0056781299 Siti Aminah\n")
+            ->call('imporTeks')
+            ->assertSee('1 siswa baru dibuat, 1 sudah terdaftar sebelumnya');
+
+        $lama->refresh();
+
+        expect(User::query()->where('username', '0056781234')->count())->toBe(1)
+            ->and($kelasA->siswa()->pluck('users.id'))->toContain($lama->id)
+            ->and($kelasB->siswa()->pluck('users.id'))->toContain($lama->id)
+            ->and(Hash::check('482913', $lama->password))->toBeTrue()
+            ->and($lama->pin_kartu)->toBe('482913')
+            ->and($lama->kode_anonim)->toBe('S-007');
     });
 
     it('refuses a NIS that belongs to a non-student account', function (): void {

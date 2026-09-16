@@ -4,6 +4,7 @@ namespace App\Livewire\Guru;
 
 use App\Models\Classroom;
 use App\Services\Kelas\PembacaCsvSiswa;
+use App\Services\Kelas\PembacaTeksSiswa;
 use App\Services\Kelas\PendaftarSiswa;
 use Illuminate\Contracts\View\View;
 use Livewire\Attributes\Locked;
@@ -13,7 +14,7 @@ use Livewire\Features\SupportFileUploads\TemporaryUploadedFile;
 use Livewire\WithFileUploads;
 
 /**
- * Detail kelas untuk guru: daftar siswa, impor CSV, tambah satu siswa,
+ * Detail kelas untuk guru: daftar siswa, impor copas/CSV, tambah satu siswa,
  * atur ulang PIN, dan tautan cetak kartu (G-05).
  */
 class DetailKelas extends Component
@@ -31,6 +32,9 @@ class DetailKelas extends Component
     public string $nisBaru = '';
 
     public string $jkBaru = '';
+
+    #[Validate('nullable|string|max:20000')]
+    public string $teksSiswa = '';
 
     /** @var list<string> */
     public array $pesan = [];
@@ -66,6 +70,26 @@ class DetailKelas extends Component
         $this->galat = [...$this->galat, ...$daftar['galat']];
         $this->pesan = [sprintf('%d siswa baru dibuat, %d sudah terdaftar sebelumnya.', $daftar['dibuat'], $daftar['sudah_ada'])];
         $this->berkas = null;
+    }
+
+    public function imporTeks(PembacaTeksSiswa $pembaca, PendaftarSiswa $pendaftar): void
+    {
+        $this->validate(['teksSiswa' => 'required|string|max:20000']);
+
+        $hasil = $pembaca->baca($this->teksSiswa);
+        $this->galat = $hasil['galat'];
+
+        if ($hasil['baris'] === []) {
+            $this->galat[] = 'Tidak ada baris siswa yang bisa dibaca dari daftar.';
+            $this->teksSiswa = '';
+
+            return;
+        }
+
+        $daftar = $pendaftar->daftarkanBanyak($this->kelas(), $hasil['baris']);
+        $this->galat = [...$this->galat, ...$daftar['galat']];
+        $this->pesan = [sprintf('%d siswa baru dibuat, %d sudah terdaftar sebelumnya.', $daftar['dibuat'], $daftar['sudah_ada'])];
+        $this->teksSiswa = '';
     }
 
     public function tambahSatu(PendaftarSiswa $pendaftar): void

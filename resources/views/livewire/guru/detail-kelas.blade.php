@@ -15,8 +15,23 @@
     @endif
 
     <section class="mt-5 rounded-xl border border-garis bg-white p-4">
+        <h2 class="font-semibold">Impor massal (tempel NIS dan nama)</h2>
+        <p class="mt-1 text-xs text-tinta-3">Satu baris satu siswa. NIS yang sudah ada tidak digandakan; siswa itu ditambahkan ke kelas ini. Sandi awal akun baru: <code>{{ \App\Services\Kelas\PendaftarSiswa::SANDI_AWAL }}</code></p>
+        <form wire:submit="imporTeks" class="mt-3 space-y-3">
+            <textarea wire:model="teksSiswa" rows="8"
+                      placeholder="0056781234 Reza Pratama&#10;0056781235 Siti Aminah"
+                      class="block min-h-32 w-full rounded-lg border border-garis px-3 py-3 font-mono text-sm leading-6"></textarea>
+            @error('teksSiswa') <p class="text-xs text-peringatan">{{ $message }}</p> @enderror
+            <button type="submit" class="block w-full rounded-lg bg-aksen px-4 py-3 font-semibold text-white" wire:loading.attr="disabled">
+                <span wire:loading.remove wire:target="imporTeks">Tambahkan ke kelas</span>
+                <span wire:loading wire:target="imporTeks">Memproses…</span>
+            </button>
+        </form>
+    </section>
+
+    <section class="mt-5 rounded-xl border border-garis bg-white p-4">
         <h2 class="font-semibold">Impor siswa dari CSV</h2>
-        <p class="mt-1 text-xs text-tinta-3">Kolom: <code>nama, nis, jenis_kelamin</code> (L/P). PIN dibuat otomatis.</p>
+        <p class="mt-1 text-xs text-tinta-3">Kolom: <code>nama, nis, jenis_kelamin</code> (L/P). Sandi awal akun baru: <code>{{ \App\Services\Kelas\PendaftarSiswa::SANDI_AWAL }}</code></p>
         <form wire:submit="impor" class="mt-3 space-y-3">
             <input type="file" wire:model="berkas" accept=".csv,text/csv" class="block w-full text-sm">
             @error('berkas') <p class="text-xs text-peringatan">{{ $message }}</p> @enderror
@@ -72,7 +87,7 @@
                     @endif
                 </li>
             @empty
-                <li class="p-4 text-sm text-tinta-3">Belum ada siswa. Impor dari CSV atau tambahkan satu per satu.</li>
+                <li class="p-4 text-sm text-tinta-3">Belum ada siswa. Tempel NIS dan nama, impor CSV, atau tambahkan satu per satu.</li>
             @endforelse
         </ul>
     </section>

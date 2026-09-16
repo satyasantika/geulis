@@ -3,6 +3,7 @@
 use App\Enums\Peran;
 use App\Http\Requests\Auth\MasukRequest;
 use App\Models\User;
+use App\Services\Kelas\PendaftarSiswa;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\assertAuthenticatedAs;
@@ -15,7 +16,16 @@ describe('S-01 masuk', function (): void {
         get('/masuk')
             ->assertOk()
             ->assertSee('NIS')
-            ->assertSee('PIN (6 digit)');
+            ->assertSee('PIN atau sandi');
+    });
+
+    it('signs a student in with the default mass-import password', function (): void {
+        $siswa = User::factory()->siswa()->pin(PendaftarSiswa::SANDI_AWAL)->create(['username' => '0056781234']);
+
+        post('/masuk', ['username' => '0056781234', 'pin' => PendaftarSiswa::SANDI_AWAL])
+            ->assertRedirect(route('siswa.jalur'));
+
+        assertAuthenticatedAs($siswa);
     });
 
     it('signs a student in with NIS and PIN and sends them to the learning path', function (): void {
@@ -100,6 +110,14 @@ describe('S-01 masuk', function (): void {
         $siswa = User::factory()->siswa()->create();
 
         actingAs($siswa)->post('/keluar')->assertRedirect(route('masuk'));
+
+        assertGuest();
+    });
+
+    it('sends an admin to the landing page after signing out', function (): void {
+        $admin = User::factory()->admin()->create();
+
+        actingAs($admin)->post('/keluar')->assertRedirect(route('beranda'));
 
         assertGuest();
     });

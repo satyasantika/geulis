@@ -28,7 +28,7 @@ use Illuminate\Notifications\Notifiable;
  * `kode_anonim` (S-001, …) dipakai pada SEMUA ekspor data; nama dan NIS
  * tidak pernah keluar dari sistem.
  */
-#[Fillable(['nama', 'username', 'email', 'password', 'pin_kartu', 'school_id', 'jenis_kelamin', 'kode_anonim', 'aktif', 'terakhir_masuk_pada'])]
+#[Fillable(['nama', 'username', 'email', 'password', 'pin_kartu', 'school_id', 'simulation_run_id', 'jenis_kelamin', 'kode_anonim', 'aktif', 'terakhir_masuk_pada'])]
 #[Hidden(['password', 'pin_kartu', 'remember_token'])]
 class User extends Authenticatable implements FilamentUser, HasName
 {
@@ -98,6 +98,11 @@ class User extends Authenticatable implements FilamentUser, HasName
     public function school(): BelongsTo
     {
         return $this->belongsTo(School::class);
+    }
+
+    public function simulationRun(): BelongsTo
+    {
+        return $this->belongsTo(SimulationRun::class);
     }
 
     public function roles(): BelongsToMany

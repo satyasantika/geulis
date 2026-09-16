@@ -4,6 +4,8 @@ namespace App\Livewire\Guru;
 
 use App\Models\Classroom;
 use App\Models\School;
+use App\Services\Kelas\PembacaTeksSiswa;
+use App\Services\Kelas\PendaftarSiswa;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Collection;
 use Livewire\Attributes\Title;
@@ -25,7 +27,16 @@ class Beranda extends Component
     #[Validate('required|exists:schools,id')]
     public ?int $school_id = null;
 
+    #[Validate('nullable|string|max:20000')]
+    public string $daftarSiswa = '';
+
     public bool $formTerbuka = false;
+
+    /** @var list<string> */
+    public array $pesan = [];
+
+    /** @var list<string> */
+    public array $galat = [];
 
     public function mount(): void
     {
@@ -34,18 +45,34 @@ class Beranda extends Component
         $this->school_id = auth()->user()->school_id;
     }
 
-    public function simpan(): void
+    public function simpan(PembacaTeksSiswa $pembaca, PendaftarSiswa $pendaftar): void
     {
         $this->validate();
 
-        Classroom::query()->create([
+        $kelas = Classroom::query()->create([
             'school_id' => $this->school_id,
             'guru_id' => auth()->id(),
             'nama' => $this->nama,
             'tahun_ajaran' => $this->tahun_ajaran,
         ]);
 
-        $this->reset('nama', 'formTerbuka');
+        $this->pesan = [];
+        $this->galat = [];
+
+        if (trim($this->daftarSiswa) !== '') {
+            $hasil = $pembaca->baca($this->daftarSiswa);
+            $this->galat = $hasil['galat'];
+
+            if ($hasil['baris'] !== []) {
+                $daftar = $pendaftar->daftarkanBanyak($kelas, $hasil['baris']);
+                $this->galat = [...$this->galat, ...$daftar['galat']];
+                $this->pesan = [sprintf('%d siswa baru dibuat, %d sudah terdaftar sebelumnya.', $daftar['dibuat'], $daftar['sudah_ada'])];
+            } elseif ($this->galat === []) {
+                $this->galat[] = 'Tidak ada baris siswa yang bisa dibaca dari daftar.';
+            }
+        }
+
+        $this->reset('nama', 'formTerbuka', 'daftarSiswa');
     }
 
     /** @return Collection<int, Classroom> */

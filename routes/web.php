@@ -5,6 +5,7 @@ use App\Http\Controllers\Guru\PinCardController;
 use App\Http\Controllers\Produk\ProductFileController;
 use App\Http\Controllers\Riset\EksporController;
 use App\Http\Controllers\Riset\SaranController;
+use App\Http\Controllers\Simulasi\MasukSimulasiController;
 use App\Http\Controllers\Siswa\ConsentController;
 use App\Livewire\Angket\AngketPersepsi;
 use App\Livewire\Angket\AngketRespons;
@@ -20,6 +21,7 @@ use App\Livewire\Peneliti\Analitik;
 use App\Livewire\Peneliti\Ekspor;
 use App\Livewire\Peneliti\Kelengkapan;
 use App\Livewire\Peneliti\Validasi as PenelitiValidasi;
+use App\Livewire\Simulasi\LayarQr;
 use App\Livewire\Siswa\AsesmenAwal;
 use App\Livewire\Siswa\Jalur;
 use App\Livewire\Siswa\Kemajuan;
@@ -57,6 +59,10 @@ Route::post('/keluar', [LoginController::class, 'keluar'])->middleware('auth')->
 
 // Nama rute `login` masih dicari beberapa paket; arahkan ke S-01.
 Route::redirect('/login', '/masuk')->name('login');
+
+Route::get('/simulasi/layar/{layarToken}', LayarQr::class)->name('simulasi.layar');
+Route::get('/simulasi/masuk/{token}', [MasukSimulasiController::class, 'form'])->name('simulasi.masuk');
+Route::post('/simulasi/masuk/{token}', [MasukSimulasiController::class, 'proses'])->name('simulasi.masuk.proses');
 
 // Validator masuk lewat tautan bertanda — tanpa akun.                                             // V-01
 Route::get('/validasi/{token}', LembarValidasi::class)->middleware('signed')->name('validasi.form');
