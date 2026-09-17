@@ -87,6 +87,22 @@ it('requires an answer before moving on', function (): void {
     expect($this->siswa->readinessResponses()->count())->toBe(0);
 });
 
+it('blocks moving to the next questionnaire page until every item on it is answered', function (): void {
+    foreach (ReadinessItem::all() as $b) {
+        $this->siswa->readinessResponses()->create(['readiness_item_id' => $b->id, 'jawaban' => $b->kunci, 'benar' => true]);
+    }
+
+    Livewire::actingAs($this->siswa)->test(AsesmenAwal::class)
+        ->assertSet('tahap', 'profil')
+        ->set('jawabanProfil.0', 3)
+        ->set('jawabanProfil.1', 2)
+        // butir index 2, 3, 4 (halaman pertama = 5 butir) sengaja dibiarkan kosong
+        ->call('halamanBerikutnya')
+        ->assertHasErrors(['angket'])
+        ->assertSet('halaman', 0)
+        ->assertSet('tahap', 'profil');
+});
+
 it('sends an already-placed student straight to the learning path', function (): void {
     $this->siswa->placement()->create(['skor_readiness' => 70, 'level_awal' => 'L2', 'modus' => 'visual', 'artefak_utama' => 'batik', 'penjelasan' => []]);
 
